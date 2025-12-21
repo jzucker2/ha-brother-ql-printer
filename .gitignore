@@ -1,3 +1,4 @@
+.tool-versions
 # Home Assistant configuration and runtime (development/testing)
 config/*
 !config/configuration.yaml

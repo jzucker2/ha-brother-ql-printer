@@ -752,3 +752,5 @@ If you're using AI assistants for your integration, these instructions will help
 ---
 
 **Happy coding! 🎉** If you build something cool with this blueprint, let us know!
+
+Adding a note: https://github.com/DL6ER/brother_ql_web
