@@ -1,8 +1,8 @@
 """
-Options flow for ha_integration_domain.
+Options flow for Brother QL Printer integration.
 
 This module implements the options flow that allows users to modify settings
-after the initial configuration, such as update intervals and debug settings.
+after the initial configuration, such as update intervals.
 
 For more information:
 https://developers.home-assistant.io/docs/config_entries_options_flow_handler
@@ -12,16 +12,18 @@ from __future__ import annotations
 
 from typing import Any
 
-from custom_components.ha_integration_domain.config_flow_handler.schemas import get_options_schema
+from custom_components.ha_integration_domain.config_flow_handler.schemas import (
+    get_options_schema,
+)
 from homeassistant import config_entries
 
 
-class IntegrationBlueprintOptionsFlow(config_entries.OptionsFlow):
+class BrotherQLOptionsFlow(config_entries.OptionsFlow):
     """
     Handle options flow for the integration.
 
     This class manages the options that users can modify after initial setup,
-    such as update intervals and debug settings.
+    such as update intervals.
 
     The options flow always starts with async_step_init and provides a single
     form for all configurable options.
@@ -38,7 +40,7 @@ class IntegrationBlueprintOptionsFlow(config_entries.OptionsFlow):
         Manage the options for the integration.
 
         This is the entry point for the options flow, allowing users to
-        configure advanced settings like update interval and debugging.
+        configure advanced settings like update interval.
 
         Args:
             user_input: The user input from the options form, or None for initial display.
@@ -56,4 +58,4 @@ class IntegrationBlueprintOptionsFlow(config_entries.OptionsFlow):
         )
 
 
-__all__ = ["IntegrationBlueprintOptionsFlow"]
+__all__ = ["BrotherQLOptionsFlow"]

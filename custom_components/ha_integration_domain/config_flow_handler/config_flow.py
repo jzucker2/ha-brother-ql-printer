@@ -1,44 +1,43 @@
 """
-Config flow for ha_integration_domain.
+Config flow for Brother QL Printer integration.
 
 This module implements the main configuration flow including:
 - Initial user setup
 - Reconfiguration of existing entries
-- Reauthentication flow
-
-For more information:
-https://developers.home-assistant.io/docs/config_entries_config_flow_handler
+- Reauthentication flow (not typically needed, but kept for consistency)
 """
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from slugify import slugify
-
 from custom_components.ha_integration_domain.config_flow_handler.schemas import (
     get_reauth_schema,
     get_reconfigure_schema,
     get_user_schema,
 )
-from custom_components.ha_integration_domain.config_flow_handler.validators import validate_credentials
+from custom_components.ha_integration_domain.config_flow_handler.validators import (
+    validate_connection,
+)
 from custom_components.ha_integration_domain.const import DOMAIN, LOGGER
 from homeassistant import config_entries
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.const import CONF_HOST, CONF_PORT
 
 if TYPE_CHECKING:
-    from custom_components.ha_integration_domain.config_flow_handler.options_flow import IntegrationBlueprintOptionsFlow
+    from custom_components.ha_integration_domain.config_flow_handler.options_flow import (
+        BrotherQLOptionsFlow,
+    )
 
 # Map exception types to error keys for user-facing messages
 ERROR_MAP = {
-    "IntegrationBlueprintApiClientAuthenticationError": "auth",
-    "IntegrationBlueprintApiClientCommunicationError": "connection",
+    "BrotherQLApiClientAuthenticationError": "auth",
+    "BrotherQLApiClientCommunicationError": "connection",
 }
 
 
-class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """
-    Handle a config flow for ha_integration_domain.
+    Handle a config flow for Brother QL Printer integration.
 
     This class manages the configuration flow for the integration, including
     initial setup, reconfiguration, and reauthentication.
@@ -46,7 +45,7 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
     Supported flows:
     - user: Initial setup via UI
     - reconfigure: Update existing configuration
-    - reauth: Handle expired credentials
+    - reauth: Handle connection issues (not typically needed, but kept for consistency)
 
     For more details:
     https://developers.home-assistant.io/docs/config_entries_config_flow_handler
@@ -57,7 +56,7 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
     @staticmethod
     def async_get_options_flow(
         config_entry: config_entries.ConfigEntry,
-    ) -> IntegrationBlueprintOptionsFlow:
+    ) -> BrotherQLOptionsFlow:
         """
         Get the options flow for this handler.
 
@@ -66,10 +65,10 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
 
         """
         from custom_components.ha_integration_domain.config_flow_handler.options_flow import (  # noqa: PLC0415
-            IntegrationBlueprintOptionsFlow,
+            BrotherQLOptionsFlow,
         )
 
-        return IntegrationBlueprintOptionsFlow()
+        return BrotherQLOptionsFlow()
 
     async def async_step_user(
         self,
@@ -91,22 +90,21 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
 
         if user_input is not None:
             try:
-                await validate_credentials(
+                await validate_connection(
                     self.hass,
-                    username=user_input[CONF_USERNAME],
-                    password=user_input[CONF_PASSWORD],
+                    host=user_input[CONF_HOST],
+                    port=user_input[CONF_PORT],
                 )
             except Exception as exception:  # noqa: BLE001
                 errors["base"] = self._map_exception_to_error(exception)
             else:
-                # Set unique ID based on username
-                # NOTE: This is just an example - use a proper unique ID in production
-                # See: https://developers.home-assistant.io/docs/config_entries_config_flow_handler#unique-ids
-                await self.async_set_unique_id(slugify(user_input[CONF_USERNAME]))
+                # Set unique ID based on host:port combination
+                unique_id = f"{user_input[CONF_HOST]}:{user_input[CONF_PORT]}"
+                await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
-                    title=user_input[CONF_USERNAME],
+                    title=f"Brother QL Printer ({user_input[CONF_HOST]}:{user_input[CONF_PORT]})",
                     data=user_input,
                 )
 
@@ -123,7 +121,7 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
         """
         Handle reconfiguration of the integration.
 
-        Allows users to update their credentials without removing and re-adding
+        Allows users to update their connection details without removing and re-adding
         the integration.
 
         Args:
@@ -138,10 +136,10 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
 
         if user_input is not None:
             try:
-                await validate_credentials(
+                await validate_connection(
                     self.hass,
-                    username=user_input[CONF_USERNAME],
-                    password=user_input[CONF_PASSWORD],
+                    host=user_input[CONF_HOST],
+                    port=user_input[CONF_PORT],
                 )
             except Exception as exception:  # noqa: BLE001
                 errors["base"] = self._map_exception_to_error(exception)
@@ -153,7 +151,10 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
 
         return self.async_show_form(
             step_id="reconfigure",
-            data_schema=get_reconfigure_schema(entry.data.get(CONF_USERNAME, "")),
+            data_schema=get_reconfigure_schema(
+                entry.data.get(CONF_HOST, ""),
+                entry.data.get(CONF_PORT, 8013),
+            ),
             errors=errors,
         )
 
@@ -162,10 +163,11 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
         entry_data: dict[str, Any] | None = None,
     ) -> config_entries.ConfigFlowResult:
         """
-        Handle reauthentication when credentials are invalid.
+        Handle reauthentication when connection fails.
 
         This flow is automatically triggered when the coordinator catches
-        an authentication error (ConfigEntryAuthFailed).
+        a connection error. For Brother QL, this typically means the service
+        is unreachable.
 
         Args:
             entry_data: The existing entry data (unused, per convention).
@@ -183,10 +185,10 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
         """
         Handle reauthentication confirmation.
 
-        Shows the reauthentication form and processes updated credentials.
+        Shows the reauthentication form and processes updated connection details.
 
         Args:
-            user_input: The user input with updated credentials, or None for initial display.
+            user_input: The user input with updated connection details, or None for initial display.
 
         Returns:
             The config flow result, either showing a form or updating the entry.
@@ -197,10 +199,10 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
 
         if user_input is not None:
             try:
-                await validate_credentials(
+                await validate_connection(
                     self.hass,
-                    username=user_input[CONF_USERNAME],
-                    password=user_input[CONF_PASSWORD],
+                    host=user_input[CONF_HOST],
+                    port=user_input[CONF_PORT],
                 )
             except Exception as exception:  # noqa: BLE001
                 errors["base"] = self._map_exception_to_error(exception)
@@ -212,10 +214,14 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
 
         return self.async_show_form(
             step_id="reauth_confirm",
-            data_schema=get_reauth_schema(entry.data.get(CONF_USERNAME, "")),
+            data_schema=get_reauth_schema(
+                entry.data.get(CONF_HOST, ""),
+                entry.data.get(CONF_PORT, 8013),
+            ),
             errors=errors,
             description_placeholders={
-                "username": entry.data.get(CONF_USERNAME, ""),
+                "host": entry.data.get(CONF_HOST, ""),
+                "port": str(entry.data.get(CONF_PORT, 8013)),
             },
         )
 
@@ -235,4 +241,4 @@ class IntegrationBlueprintConfigFlowHandler(config_entries.ConfigFlow, domain=DO
         return ERROR_MAP.get(exception_name, "unknown")
 
 
-__all__ = ["IntegrationBlueprintConfigFlowHandler"]
+__all__ = ["BrotherQLConfigFlowHandler"]

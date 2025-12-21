@@ -1,14 +1,11 @@
 """
-Data update coordinator package for ha_integration_domain.
+Data update coordinator package for Brother QL Printer integration.
 
 This package provides the coordinator infrastructure for managing periodic
 data updates and distributing them to all entities in the integration.
 
 Package structure:
-- base.py: Main coordinator class (IntegrationBlueprintDataUpdateCoordinator)
-- data_processing.py: Data validation, transformation, and caching utilities
-- error_handling.py: Error recovery strategies and retry logic
-- listeners.py: Event listeners and entity callbacks
+- base.py: Main coordinator class (BrotherQLDataUpdateCoordinator)
 
 For more information on coordinators:
 https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
@@ -16,6 +13,6 @@ https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-
 
 from __future__ import annotations
 
-from .base import IntegrationBlueprintDataUpdateCoordinator
+from .base import BrotherQLDataUpdateCoordinator
 
-__all__ = ["IntegrationBlueprintDataUpdateCoordinator"]
+__all__ = ["BrotherQLDataUpdateCoordinator"]

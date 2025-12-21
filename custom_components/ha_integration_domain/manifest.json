@@ -1,13 +1,13 @@
 {
-  "domain": "ha_integration_domain",
-  "name": "Integration Blueprint",
+  "domain": "brother_ql",
+  "name": "Brother QL Printer",
   "codeowners": [
     "@jpawlowski"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/jpawlowski/hacs.integration_blueprint",
-  "integration_type": "hub",
-  "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/jpawlowski/hacs.integration_blueprint/issues",
+  "documentation": "https://github.com/jpawlowski/ha-brother-ql-printer",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/jpawlowski/ha-brother-ql-printer/issues",
   "version": "0.1.0"
 }

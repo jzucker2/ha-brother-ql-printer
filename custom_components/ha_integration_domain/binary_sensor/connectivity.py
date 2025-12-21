@@ -1,10 +1,10 @@
-"""Connectivity binary sensor for ha_integration_domain."""
+"""Connectivity binary sensor for Brother QL Printer integration."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from custom_components.ha_integration_domain.entity import IntegrationBlueprintEntity
+from custom_components.ha_integration_domain.entity import BrotherQLEntity
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -13,26 +13,28 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.const import EntityCategory
 
 if TYPE_CHECKING:
-    from custom_components.ha_integration_domain.coordinator import IntegrationBlueprintDataUpdateCoordinator
+    from custom_components.ha_integration_domain.coordinator import (
+        BrotherQLDataUpdateCoordinator,
+    )
 
 ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
-        key="api_connectivity",
-        translation_key="api_connectivity",
+        key="printer_connectivity",
+        translation_key="printer_connectivity",
         device_class=BinarySensorDeviceClass.CONNECTIVITY,
         entity_category=EntityCategory.DIAGNOSTIC,
-        icon="mdi:api",
+        icon="mdi:printer",
         has_entity_name=True,
     ),
 )
 
 
-class IntegrationBlueprintConnectivitySensor(BinarySensorEntity, IntegrationBlueprintEntity):
-    """Connectivity sensor for ha_integration_domain."""
+class BrotherQLConnectivitySensor(BinarySensorEntity, BrotherQLEntity):
+    """Connectivity sensor for Brother QL Printer integration."""
 
     def __init__(
         self,
-        coordinator: IntegrationBlueprintDataUpdateCoordinator,
+        coordinator: BrotherQLDataUpdateCoordinator,
         entity_description: BinarySensorEntityDescription,
     ) -> None:
         """Initialize the sensor."""
@@ -40,14 +42,27 @@ class IntegrationBlueprintConnectivitySensor(BinarySensorEntity, IntegrationBlue
 
     @property
     def is_on(self) -> bool:
-        """Return true if the API connection is established."""
+        """Return true if the printer connection is established."""
         # Connection is considered established if coordinator has valid data
-        return self.coordinator.last_update_success
+        if not self.coordinator.last_update_success:
+            return False
+        
+        # Check if printer is connected according to API response
+        data = self.coordinator.data
+        if data and isinstance(data, dict):
+            printer = data.get("printer", {})
+            return printer.get("connected", False)
+        
+        return False
 
     @property
     def extra_state_attributes(self) -> dict[str, str | None]:
         """Return additional state attributes."""
+        data = self.coordinator.data or {}
+        printer = data.get("printer", {})
+        
         return {
             "update_interval": str(self.coordinator.update_interval),
-            "api_endpoint": "JSONPlaceholder (Demo)",
+            "printer_model": printer.get("model", "Unknown"),
+            "api_endpoint": f"http://{self.coordinator.config_entry.data.get('host', 'localhost')}:{self.coordinator.config_entry.data.get('port', 8013)}",
         }

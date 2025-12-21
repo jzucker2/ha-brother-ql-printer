@@ -1,48 +1,45 @@
 """
-Credential validators.
+Connection validators.
 
-Validation functions for user credentials and authentication.
-
-When this file grows, consider splitting into:
-- credentials.py: Basic credential validation
-- oauth.py: OAuth-specific validation
-- api_auth.py: API authentication methods
+Validation functions for testing connection to brother_ql_web service.
 """
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from custom_components.ha_integration_domain.api import IntegrationBlueprintApiClient
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from custom_components.ha_integration_domain.api import (
+    BrotherQLApiClient,
+    BrotherQLApiClientError,
+)
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
 
-async def validate_credentials(hass: HomeAssistant, username: str, password: str) -> None:
+async def validate_connection(hass: HomeAssistant, host: str, port: int) -> None:
     """
-    Validate user credentials by testing API connection.
+    Validate connection to brother_ql_web service by testing API connection.
 
     Args:
         hass: Home Assistant instance.
-        username: The username to validate.
-        password: The password to validate.
+        host: The hostname or IP address of the brother_ql_web service.
+        port: The port number of the brother_ql_web service.
 
     Raises:
-        IntegrationBlueprintApiClientAuthenticationError: If credentials are invalid.
-        IntegrationBlueprintApiClientCommunicationError: If communication fails.
-        IntegrationBlueprintApiClientError: For other API errors.
+        BrotherQLApiClientError: If connection fails or service is unreachable.
 
     """
-    client = IntegrationBlueprintApiClient(
-        username=username,
-        password=password,
-        session=async_create_clientsession(hass),
+    client = BrotherQLApiClient(
+        host=host,
+        port=port,
+        session=async_get_clientsession(hass),
     )
-    await client.async_get_data()  # May raise authentication/communication errors
+    # Test connection by getting printer status
+    await client.async_get_status()
 
 
 __all__ = [
-    "validate_credentials",
+    "validate_connection",
 ]

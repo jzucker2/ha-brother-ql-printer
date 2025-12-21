@@ -1,4 +1,4 @@
-"""Custom types for ha_integration_domain."""
+"""Custom types for Brother QL Printer integration."""
 
 from __future__ import annotations
 
@@ -9,17 +9,17 @@ if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.loader import Integration
 
-    from .api import IntegrationBlueprintApiClient
-    from .coordinator import IntegrationBlueprintDataUpdateCoordinator
+    from .api import BrotherQLApiClient
+    from .coordinator import BrotherQLDataUpdateCoordinator
 
 
-type IntegrationBlueprintConfigEntry = ConfigEntry[IntegrationBlueprintData]
+type BrotherQLConfigEntry = ConfigEntry[BrotherQLData]
 
 
 @dataclass
-class IntegrationBlueprintData:
-    """Data for ha_integration_domain."""
+class BrotherQLData:
+    """Data for Brother QL Printer integration."""
 
-    client: IntegrationBlueprintApiClient
-    coordinator: IntegrationBlueprintDataUpdateCoordinator
+    client: BrotherQLApiClient
+    coordinator: BrotherQLDataUpdateCoordinator
     integration: Integration

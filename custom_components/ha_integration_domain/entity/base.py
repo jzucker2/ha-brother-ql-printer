@@ -1,5 +1,5 @@
 """
-Base entity class for ha_integration_domain.
+Base entity class for Brother QL Printer integration.
 
 This module provides the base entity class that all integration entities inherit from.
 It handles common functionality like device info, unique IDs, and coordinator integration.
@@ -14,7 +14,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from custom_components.ha_integration_domain.const import ATTRIBUTION
-from custom_components.ha_integration_domain.coordinator import IntegrationBlueprintDataUpdateCoordinator
+from custom_components.ha_integration_domain.coordinator import BrotherQLDataUpdateCoordinator
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -22,9 +22,9 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity import EntityDescription
 
 
-class IntegrationBlueprintEntity(CoordinatorEntity[IntegrationBlueprintDataUpdateCoordinator]):
+class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
     """
-    Base entity class for ha_integration_domain.
+    Base entity class for Brother QL Printer integration.
 
     All entities in this integration inherit from this class, which provides:
     - Automatic coordinator updates
@@ -42,7 +42,7 @@ class IntegrationBlueprintEntity(CoordinatorEntity[IntegrationBlueprintDataUpdat
 
     def __init__(
         self,
-        coordinator: IntegrationBlueprintDataUpdateCoordinator,
+        coordinator: BrotherQLDataUpdateCoordinator,
         entity_description: EntityDescription,
     ) -> None:
         """
@@ -57,6 +57,11 @@ class IntegrationBlueprintEntity(CoordinatorEntity[IntegrationBlueprintDataUpdat
         self.entity_description = entity_description
         # Include entity description key in unique_id to support multiple entities
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{entity_description.key}"
+        
+        # Get printer info from coordinator data
+        printer_info = coordinator.data.get("printer", {}) if coordinator.data else {}
+        model = printer_info.get("model", "Brother QL Printer")
+        
         self._attr_device_info = DeviceInfo(
             identifiers={
                 (
@@ -65,6 +70,7 @@ class IntegrationBlueprintEntity(CoordinatorEntity[IntegrationBlueprintDataUpdat
                 ),
             },
             name=coordinator.config_entry.title,
-            manufacturer=coordinator.config_entry.domain,
-            model=coordinator.data.get("model", "Unknown"),
+            manufacturer="Brother",
+            model=model,
+            configuration_url=f"http://{coordinator.config_entry.data.get('host', 'localhost')}:{coordinator.config_entry.data.get('port', 8013)}/labeldesigner",
         )

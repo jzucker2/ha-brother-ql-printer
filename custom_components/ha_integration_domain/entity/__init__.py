@@ -1,5 +1,5 @@
-"""Entity package for ha_integration_domain."""
+"""Entity package for Brother QL Printer integration."""
 
-from .base import IntegrationBlueprintEntity
+from .base import BrotherQLEntity
 
-__all__ = ["IntegrationBlueprintEntity"]
+__all__ = ["BrotherQLEntity"]

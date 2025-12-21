@@ -5,11 +5,6 @@ Schemas for the main configuration flow steps:
 - User setup
 - Reconfiguration
 - Reauthentication
-
-When this file grows too large (>300 lines), consider splitting into:
-- user.py: User setup schemas
-- reauth.py: Reauthentication schemas
-- reconfigure.py: Reconfiguration schemas
 """
 
 from __future__ import annotations
@@ -19,8 +14,10 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.helpers import selector
+
+from ...const import DEFAULT_HOST, DEFAULT_PORT
 
 
 def get_user_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
@@ -31,35 +28,42 @@ def get_user_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
         defaults: Optional dictionary of default values to pre-populate the form.
 
     Returns:
-        Voluptuous schema for user credentials input.
+        Voluptuous schema for connection details input.
 
     """
     defaults = defaults or {}
     return vol.Schema(
         {
             vol.Required(
-                CONF_USERNAME,
-                default=defaults.get(CONF_USERNAME, vol.UNDEFINED),
+                CONF_HOST,
+                default=defaults.get(CONF_HOST, DEFAULT_HOST),
             ): selector.TextSelector(
                 selector.TextSelectorConfig(
                     type=selector.TextSelectorType.TEXT,
                 ),
             ),
-            vol.Required(CONF_PASSWORD): selector.TextSelector(
-                selector.TextSelectorConfig(
-                    type=selector.TextSelectorType.PASSWORD,
+            vol.Required(
+                CONF_PORT,
+                default=defaults.get(CONF_PORT, DEFAULT_PORT),
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=1,
+                    max=65535,
+                    step=1,
+                    mode=selector.NumberSelectorMode.BOX,
                 ),
             ),
         },
     )
 
 
-def get_reconfigure_schema(username: str) -> vol.Schema:
+def get_reconfigure_schema(host: str, port: int) -> vol.Schema:
     """
     Get schema for reconfigure step.
 
     Args:
-        username: Current username to pre-fill in the form.
+        host: Current host to pre-fill in the form.
+        port: Current port to pre-fill in the form.
 
     Returns:
         Voluptuous schema for reconfiguration.
@@ -68,30 +72,38 @@ def get_reconfigure_schema(username: str) -> vol.Schema:
     return vol.Schema(
         {
             vol.Required(
-                CONF_USERNAME,
-                default=username,
+                CONF_HOST,
+                default=host,
             ): selector.TextSelector(
                 selector.TextSelectorConfig(
                     type=selector.TextSelectorType.TEXT,
                 ),
             ),
             vol.Required(
-                CONF_PASSWORD,
-            ): selector.TextSelector(
-                selector.TextSelectorConfig(
-                    type=selector.TextSelectorType.PASSWORD,
+                CONF_PORT,
+                default=port,
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=1,
+                    max=65535,
+                    step=1,
+                    mode=selector.NumberSelectorMode.BOX,
                 ),
             ),
         },
     )
 
 
-def get_reauth_schema(username: str) -> vol.Schema:
+def get_reauth_schema(host: str, port: int) -> vol.Schema:
     """
     Get schema for reauthentication step.
 
+    Note: For Brother QL, reauth is not typically needed as there's no authentication.
+    This is kept for consistency with the flow structure.
+
     Args:
-        username: Current username to pre-fill in the form.
+        host: Current host to pre-fill in the form.
+        port: Current port to pre-fill in the form.
 
     Returns:
         Voluptuous schema for reauthentication.
@@ -100,18 +112,22 @@ def get_reauth_schema(username: str) -> vol.Schema:
     return vol.Schema(
         {
             vol.Required(
-                CONF_USERNAME,
-                default=username,
+                CONF_HOST,
+                default=host,
             ): selector.TextSelector(
                 selector.TextSelectorConfig(
                     type=selector.TextSelectorType.TEXT,
                 ),
             ),
             vol.Required(
-                CONF_PASSWORD,
-            ): selector.TextSelector(
-                selector.TextSelectorConfig(
-                    type=selector.TextSelectorType.PASSWORD,
+                CONF_PORT,
+                default=port,
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=1,
+                    max=65535,
+                    step=1,
+                    mode=selector.NumberSelectorMode.BOX,
                 ),
             ),
         },

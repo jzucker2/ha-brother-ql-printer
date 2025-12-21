@@ -1,15 +1,15 @@
-"""API package for ha_integration_domain."""
+"""API package for Brother QL Printer integration."""
 
 from .client import (
-    IntegrationBlueprintApiClient,
-    IntegrationBlueprintApiClientAuthenticationError,
-    IntegrationBlueprintApiClientCommunicationError,
-    IntegrationBlueprintApiClientError,
+    BrotherQLApiClient,
+    BrotherQLApiClientAuthenticationError,
+    BrotherQLApiClientCommunicationError,
+    BrotherQLApiClientError,
 )
 
 __all__ = [
-    "IntegrationBlueprintApiClient",
-    "IntegrationBlueprintApiClientAuthenticationError",
-    "IntegrationBlueprintApiClientCommunicationError",
-    "IntegrationBlueprintApiClientError",
+    "BrotherQLApiClient",
+    "BrotherQLApiClientAuthenticationError",
+    "BrotherQLApiClientCommunicationError",
+    "BrotherQLApiClientError",
 ]
