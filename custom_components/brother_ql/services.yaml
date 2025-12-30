@@ -14,7 +14,7 @@ print_text:
         text:
     font_size:
       name: Font Size
-      description: Font size for the text (default: 100)
+      description: "Font size for the text (default: 100)"
       required: false
       default: 100
       example: 100
@@ -25,7 +25,7 @@ print_text:
           step: 10
     font_family:
       name: Font Family
-      description: Font family name (default: Arial)
+      description: "Font family name (default: Arial)"
       required: false
       default: Arial
       example: "Arial"
