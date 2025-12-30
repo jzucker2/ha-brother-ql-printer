@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from custom_components.brother_ql.const import DEFAULT_PRINT_TEXT, LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
 from homeassistant.components.text import TextEntity, TextEntityDescription
 from homeassistant.const import EntityCategory
@@ -35,12 +36,14 @@ class BrotherQLPrintText(TextEntity, BrotherQLEntity):
         """Initialize the text entity."""
         super().__init__(coordinator, ENTITY_DESCRIPTION)
         self._entry = entry
-        self._attr_native_value = ""
+        # Load value from options or use default
+        self._attr_native_value = entry.options.get("print_text", DEFAULT_PRINT_TEXT)
 
     @property
     def native_value(self) -> str:
         """Return the current text value."""
-        return self._attr_native_value
+        # Get from options (persisted across reloads)
+        return self._entry.options.get("print_text", DEFAULT_PRINT_TEXT)
 
     async def async_set_value(self, value: str) -> None:
         """
@@ -49,12 +52,21 @@ class BrotherQLPrintText(TextEntity, BrotherQLEntity):
         Args:
             value: The text to set
         """
+        # Update options with new text value
+        options = dict(self._entry.options)
+        options["print_text"] = value
+
+        self.hass.config_entries.async_update_entry(self._entry, options=options)
+        LOGGER.debug("Print text updated: %s", value)
+
+        # Update local value
         self._attr_native_value = value
         self.async_write_ha_state()
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        # Text entity doesn't depend on coordinator data
-        # But we should still update state if needed
+        # Text value is stored in options, not coordinator data
+        # Update local value from options
+        self._attr_native_value = self._entry.options.get("print_text", DEFAULT_PRINT_TEXT)
         self.async_write_ha_state()

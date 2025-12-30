@@ -23,3 +23,6 @@ DEFAULT_CURRENT_FONT_SIZE = DEFAULT_FONT_SIZE
 
 # Label size configuration defaults
 DEFAULT_LABEL_SIZE = "17x54"
+
+# Print text configuration defaults
+DEFAULT_PRINT_TEXT = ""
