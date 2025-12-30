@@ -276,6 +276,12 @@ class BrotherQLApiClient:
                 text = await response.text()
                 return {"status": "success", "message": text} if text else None
 
+        except BrotherQLApiClientAuthenticationError:
+            # Re-raise authentication errors directly so coordinator can handle them
+            raise
+        except BrotherQLApiClientCommunicationError:
+            # Re-raise communication errors directly
+            raise
         except TimeoutError as exception:
             msg = f"Timeout error communicating with printer - {exception}"
             raise BrotherQLApiClientCommunicationError(msg) from exception
