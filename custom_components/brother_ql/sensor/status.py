@@ -48,7 +48,9 @@ class BrotherQLStatusSensor(SensorEntity, BrotherQLEntity):
     @property
     def extra_state_attributes(self) -> dict[str, str | int | None]:
         """Return additional state attributes."""
-        data = self.coordinator.data or {}
+        data = self.coordinator.data
+        if not isinstance(data, dict):
+            data = {}
         printer = data.get("printer", {})
         last_print = data.get("last_print")
 

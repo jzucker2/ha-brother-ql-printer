@@ -56,7 +56,9 @@ class BrotherQLConnectivitySensor(BinarySensorEntity, BrotherQLEntity):
     @property
     def extra_state_attributes(self) -> dict[str, str | None]:
         """Return additional state attributes."""
-        data = self.coordinator.data or {}
+        data = self.coordinator.data
+        if not isinstance(data, dict):
+            data = {}
         printer = data.get("printer", {})
 
         return {
