@@ -72,5 +72,5 @@ class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
             name=coordinator.config_entry.title,
             manufacturer="Brother",
             model=model,
-            configuration_url=f"http://{coordinator.config_entry.data.get('host', 'localhost')}:{coordinator.config_entry.data.get('port', 8013)}/labeldesigner",
+            configuration_url=f"http://{coordinator.config_entry.data.get('host', 'localhost')}:{int(coordinator.config_entry.data.get('port', 8013))}/labeldesigner",
         )

@@ -62,5 +62,5 @@ class BrotherQLConnectivitySensor(BinarySensorEntity, BrotherQLEntity):
         return {
             "update_interval": str(self.coordinator.update_interval),
             "printer_model": printer.get("model", "Unknown"),
-            "api_endpoint": f"http://{self.coordinator.config_entry.data.get('host', 'localhost')}:{self.coordinator.config_entry.data.get('port', 8013)}",
+            "api_endpoint": f"http://{self.coordinator.config_entry.data.get('host', 'localhost')}:{int(self.coordinator.config_entry.data.get('port', 8013))}",
         }

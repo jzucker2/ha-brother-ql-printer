@@ -85,9 +85,9 @@ class BrotherQLApiClient:
 
         """
         self._host = host
-        self._port = port
+        self._port = int(port)  # Cast to int in case NumberSelector returns float
         self._session = session
-        self._base_url = f"http://{host}:{port}"
+        self._base_url = f"http://{host}:{self._port}"
 
     async def async_get_status(self) -> dict[str, Any]:
         """

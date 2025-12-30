@@ -93,12 +93,13 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = self._map_exception_to_error(exception)
             else:
                 # Set unique ID based on host:port combination
-                unique_id = f"{user_input[CONF_HOST]}:{user_input[CONF_PORT]}"
+                port = int(user_input[CONF_PORT])  # Cast to int (NumberSelector may return float)
+                unique_id = f"{user_input[CONF_HOST]}:{port}"
                 await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
-                    title=f"Brother QL Printer ({user_input[CONF_HOST]}:{user_input[CONF_PORT]})",
+                    title=f"Brother QL Printer ({user_input[CONF_HOST]}:{port})",
                     data=user_input,
                 )
 
@@ -215,7 +216,9 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
             description_placeholders={
                 "host": entry.data.get(CONF_HOST, ""),
-                "port": str(entry.data.get(CONF_PORT, 8013)),
+                "port": str(
+                    int(entry.data.get(CONF_PORT, 8013))
+                ),  # Cast to int first (NumberSelector may return float)
             },
         )
 

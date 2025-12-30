@@ -109,7 +109,7 @@ async def async_setup_entry(
     # Initialize client first
     client = BrotherQLApiClient(
         host=entry.data[CONF_HOST],  # From config flow setup
-        port=entry.data[CONF_PORT],  # From config flow setup
+        port=int(entry.data[CONF_PORT]),  # Cast to int (NumberSelector may return float)
         session=async_get_clientsession(hass),
     )
 
