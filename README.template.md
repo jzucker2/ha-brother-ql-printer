@@ -70,7 +70,7 @@ Then:
 
 If you prefer not to use HACS:
 
-1. Download the `custom_components/ha_integration_domain/` folder from this repository
+1. Download the `custom_components/brother_ql/` folder from this repository
 2. Copy it to your Home Assistant's `custom_components/` directory
 3. Restart Home Assistant
 
@@ -84,7 +84,7 @@ If you prefer not to use HACS:
 
 Click the button below to open the configuration dialog:
 
-[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ha_integration_domain)
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=brother_ql)
 
 Follow the setup wizard:
 
@@ -185,26 +185,26 @@ Find all entities in **Settings** → **Devices & Services** → **Integration B
 
 The integration provides services for advanced automation:
 
-### `ha_integration_domain.example_action`
+### `brother_ql.example_action`
 
 Perform a custom action (customize this for your needs).
 
 **Example:**
 
 ```yaml
-service: ha_integration_domain.example_action
+service: brother_ql.example_action
 data:
   # Add your parameters here
 ```
 
-### `ha_integration_domain.reload_data`
+### `brother_ql.reload_data`
 
 Manually refresh data from the API without waiting for the update interval.
 
 **Example:**
 
 ```yaml
-service: ha_integration_domain.reload_data
+service: brother_ql.reload_data
 ```
 
 Use these services in automations or scripts for more control.
@@ -271,7 +271,7 @@ To enable debug logging for this integration, add the following to your `configu
 logger:
   default: info
   logs:
-    custom_components.ha_integration_domain: debug
+    custom_components.brother_ql: debug
 ```
 
 ### Common Issues

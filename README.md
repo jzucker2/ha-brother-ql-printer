@@ -19,39 +19,7 @@ This blueprint is designed to work with **Home Assistant 2025.7+** and includes 
 
 ---
 
-## Getting Started - Creating Your Integration
-
-Ready to create your own Home Assistant integration? **First, create your own repository from this template**, then choose one of two development options:
-
-- **Option 1: GitHub Codespaces** ☁️ - Develop in the cloud (browser-based, zero install, recommended for beginners)
-- **Option 2: Local DevContainer** 💻 - Develop on your machine (requires Docker + VS Code)
-
-Both options use the same DevContainer setup, so your code and workflow are identical!
-
-### Step 0: Create Your Repository First! 🎯
-
-**Before you start developing**, create your own repository:
-
-1. Click the **"Use this template"** button at the top of this page
-2. Choose a name for your integration repository (e.g., `hass-my-awesome-device`)
-3. Click **"Create repository"**
-
-**🤖 Optional: Initialize with Copilot Coding Agent**
-
 After clicking "Create repository", GitHub may offer an optional prompt field for **[Copilot Coding Agent](https://github.com/copilot/agents)**. You can use this to automatically initialize your integration (500 character limit):
-
-```markdown
-Run ./initialize.sh with: --domain <domain> --title "<Title>" --namespace "<Prefix>" --repo <owner/repo> --author "<Name>" --force
-
-Replace:
-- <domain>: lowercase_with_underscores
-- <Title>: Your Integration Name
-- <Prefix>: YourCamelCase (optional)
-- <owner/repo>: github_user/repo_name
-- <Name>: Your Name
-
-Verify: custom_components/<domain>/ exists, manifest.json correct, README.md updated. Create PR if successful. The script deletes itself after completion.
-```
 
 **Example:** `--domain my_device --title "My Device" --repo user/hacs-my-device --author "John Doe" --force`
 
@@ -125,7 +93,7 @@ You'll need these installed locally:
 
 > **Note:** Both Codespaces and local DevContainer provide the exact same experience. After the container is ready, run `./initialize.sh` to customize your integration. The only difference is where the container runs (GitHub's cloud vs. your machine).
 
-Then customize the API client in [`api/client.py`](custom_components/ha_integration_domain/api/client.py) to connect to your actual device or service.
+Then customize the API client in [`api/client.py`](custom_components/brother_ql/api/client.py) to connect to your actual device or service.
 
 ---
 
@@ -218,7 +186,7 @@ The `initialize.sh` script supports both interactive and unattended modes:
 The script will:
 
 - ✅ Validate your domain name and check for conflicts with existing integrations
-- ✅ Replace all placeholders (`ha_integration_domain`, `Integration Blueprint`, etc.)
+- ✅ Replace all placeholders (`brother_ql`, `Integration Blueprint`, etc.)
 - ✅ Rename the custom_components directory to match your domain
 - ✅ Update the LICENSE with your name and current year
 - ✅ Replace README.md with a customized version from README.template.md
@@ -261,7 +229,7 @@ The project includes pre-configured VS Code tasks for common operations. Press `
 ### Project structure
 
 ```text
-custom_components/ha_integration_domain/  # Your integration code
+custom_components/brother_ql/  # Your integration code
 ├── __init__.py                # Integration setup and entry point
 ├── config_flow.py             # Config flow entry point (delegates to handler)
 ├── const.py                   # Constants and configuration
@@ -399,7 +367,7 @@ This section explains the key features and patterns used in this integration blu
 
 ### Config flow
 
-The config flow is organized in the [`config_flow_handler/`](custom_components/ha_integration_domain/config_flow_handler/) package. Users can:
+The config flow is organized in the [`config_flow_handler/`](custom_components/brother_ql/config_flow_handler/) package. Users can:
 
 - Add the integration through Settings → Devices & Services
 - Enter credentials (or other configuration)
@@ -408,12 +376,12 @@ The config flow is organized in the [`config_flow_handler/`](custom_components/h
 
 **Package structure:**
 
-- [`handler.py`](custom_components/ha_integration_domain/config_flow_handler/handler.py) - Base handler with shared logic
-- [`config_flow.py`](custom_components/ha_integration_domain/config_flow_handler/config_flow.py) - User setup flow
-- [`options_flow.py`](custom_components/ha_integration_domain/config_flow_handler/options_flow.py) - Options flow for reconfiguration
-- [`subentry_flow.py`](custom_components/ha_integration_domain/config_flow_handler/subentry_flow.py) - Subentry flow for multi-device setups
-- [`schemas/`](custom_components/ha_integration_domain/config_flow_handler/schemas/) - Voluptuous schemas for input validation
-- [`validators/`](custom_components/ha_integration_domain/config_flow_handler/validators/) - Custom validators
+- [`handler.py`](custom_components/brother_ql/config_flow_handler/handler.py) - Base handler with shared logic
+- [`config_flow.py`](custom_components/brother_ql/config_flow_handler/config_flow.py) - User setup flow
+- [`options_flow.py`](custom_components/brother_ql/config_flow_handler/options_flow.py) - Options flow for reconfiguration
+- [`subentry_flow.py`](custom_components/brother_ql/config_flow_handler/subentry_flow.py) - Subentry flow for multi-device setups
+- [`schemas/`](custom_components/brother_ql/config_flow_handler/schemas/) - Voluptuous schemas for input validation
+- [`validators/`](custom_components/brother_ql/config_flow_handler/validators/) - Custom validators
 
 **Key features:**
 
@@ -424,7 +392,7 @@ The config flow is organized in the [`config_flow_handler/`](custom_components/h
 
 ### DataUpdateCoordinator
 
-The [`coordinator/`](custom_components/ha_integration_domain/coordinator/) package efficiently manages data fetching:
+The [`coordinator/`](custom_components/brother_ql/coordinator/) package efficiently manages data fetching:
 
 - **Single API call**: Instead of each entity polling separately, the coordinator fetches data once
 - **Shared data**: All entities receive the same data, reducing API load
@@ -435,7 +403,7 @@ This is the recommended pattern in Home Assistant Core for any integration that 
 
 ### Translation keys
 
-All user-facing strings use translation keys instead of hardcoded English text. See [`translations/en.json`](custom_components/ha_integration_domain/translations/en.json).
+All user-facing strings use translation keys instead of hardcoded English text. See [`translations/en.json`](custom_components/brother_ql/translations/en.json).
 
 **Benefits:**
 
@@ -447,7 +415,7 @@ The config flow, entity states, and error messages all support translations.
 
 ### Diagnostics
 
-The [`diagnostics.py`](custom_components/ha_integration_domain/diagnostics.py) file provides debug information that users can download from the UI:
+The [`diagnostics.py`](custom_components/brother_ql/diagnostics.py) file provides debug information that users can download from the UI:
 
 - Device information
 - Configuration details (with sensitive data redacted)
@@ -460,54 +428,54 @@ Users can share this file when reporting issues without exposing passwords or to
 
 The blueprint includes multiple entity types organized as packages to demonstrate different patterns:
 
-**Sensors** ([`sensor/`](custom_components/ha_integration_domain/sensor/))
+**Sensors** ([`sensor/`](custom_components/brother_ql/sensor/))
 
 - Shows how to create sensors with state values
 - Demonstrates state classes and device classes
 - Examples:
-  - [`air_quality.py`](custom_components/ha_integration_domain/sensor/air_quality.py) - Air quality index sensor
-  - [`diagnostic.py`](custom_components/ha_integration_domain/sensor/diagnostic.py) - Diagnostic sensor
+  - [`air_quality.py`](custom_components/brother_ql/sensor/air_quality.py) - Air quality index sensor
+  - [`diagnostic.py`](custom_components/brother_ql/sensor/diagnostic.py) - Diagnostic sensor
 
-**Binary Sensors** ([`binary_sensor/`](custom_components/ha_integration_domain/binary_sensor/))
+**Binary Sensors** ([`binary_sensor/`](custom_components/brother_ql/binary_sensor/))
 
 - Shows binary (on/off) sensors
 - Uses device classes for proper icons
 - Examples:
-  - [`connectivity.py`](custom_components/ha_integration_domain/binary_sensor/connectivity.py) - Connectivity status
-  - [`filter.py`](custom_components/ha_integration_domain/binary_sensor/filter.py) - Filter replacement indicator
+  - [`connectivity.py`](custom_components/brother_ql/binary_sensor/connectivity.py) - Connectivity status
+  - [`filter.py`](custom_components/brother_ql/binary_sensor/filter.py) - Filter replacement indicator
 
-**Switches** ([`switch/`](custom_components/ha_integration_domain/switch/))
+**Switches** ([`switch/`](custom_components/brother_ql/switch/))
 
 - Shows controllable entities that interact with the API
 - Implements `turn_on` and `turn_off` methods
 - Demonstrates error handling for control commands
-- Example: [`example_switch.py`](custom_components/ha_integration_domain/switch/example_switch.py) - Example switch entity
+- Example: [`example_switch.py`](custom_components/brother_ql/switch/example_switch.py) - Example switch entity
 
-**Select Entities** ([`select/`](custom_components/ha_integration_domain/select/))
+**Select Entities** ([`select/`](custom_components/brother_ql/select/))
 
 - Shows dropdown selection entities
-- Example: [`fan_speed.py`](custom_components/ha_integration_domain/select/fan_speed.py) - Fan speed selector
+- Example: [`fan_speed.py`](custom_components/brother_ql/select/fan_speed.py) - Fan speed selector
 
-**Number Entities** ([`number/`](custom_components/ha_integration_domain/number/))
+**Number Entities** ([`number/`](custom_components/brother_ql/number/))
 
 - Shows numeric input entities
-- Example: [`target_humidity.py`](custom_components/ha_integration_domain/number/target_humidity.py) - Target humidity setter
+- Example: [`target_humidity.py`](custom_components/brother_ql/number/target_humidity.py) - Target humidity setter
 
-**Button Entities** ([`button/`](custom_components/ha_integration_domain/button/))
+**Button Entities** ([`button/`](custom_components/brother_ql/button/))
 
 - Shows action button entities
-- Example: [`reset_filter.py`](custom_components/ha_integration_domain/button/reset_filter.py) - Filter reset button
+- Example: [`reset_filter.py`](custom_components/brother_ql/button/reset_filter.py) - Filter reset button
 
-**Fan Entities** ([`fan/`](custom_components/ha_integration_domain/fan/))
+**Fan Entities** ([`fan/`](custom_components/brother_ql/fan/))
 
 - Shows fan control entities
-- Example: [`air_purifier_fan.py`](custom_components/ha_integration_domain/fan/air_purifier_fan.py) - Air purifier fan control
+- Example: [`air_purifier_fan.py`](custom_components/brother_ql/fan/air_purifier_fan.py) - Air purifier fan control
 
 Each platform package shows best practices for entity setup, naming, and data handling.
 
 ### API client
 
-The API client is organized in the [`api/`](custom_components/ha_integration_domain/api/) package:
+The API client is organized in the [`api/`](custom_components/brother_ql/api/) package:
 
 **Modern patterns:**
 
@@ -522,7 +490,7 @@ The API client is organized in the [`api/`](custom_components/ha_integration_dom
 - `IntegrationBlueprintApiClientAuthenticationError` - Invalid credentials (401/403)
 - `IntegrationBlueprintApiClientCommunicationError` - Network or connection errors
 
-Replace the dummy API calls in [`api/client.py`](custom_components/ha_integration_domain/api/client.py) with your actual device/service API.
+Replace the dummy API calls in [`api/client.py`](custom_components/brother_ql/api/client.py) with your actual device/service API.
 
 ### Development container
 
@@ -627,7 +595,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 async def test_setup_entry(hass: HomeAssistant) -> None:
     """Test setting up the integration."""
-    entry = MockConfigEntry(domain="ha_integration_domain", data={...})
+    entry = MockConfigEntry(domain="brother_ql", data={...})
     assert await hass.config_entries.async_setup(entry.entry_id)
 ```
 
@@ -752,3 +720,5 @@ If you're using AI assistants for your integration, these instructions will help
 ---
 
 **Happy coding! 🎉** If you build something cool with this blueprint, let us know!
+
+Adding a note: https://github.com/DL6ER/brother_ql_web

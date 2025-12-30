@@ -1,0 +1,70 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Enter the connection details for your brother_ql_web service. This is typically running in a Docker container on port 8013.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      },
+      "reconfigure": {
+        "description": "Update the connection details for this integration.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate Integration",
+        "description": "The connection to {host}:{port} failed. Please verify the connection details and try again.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "auth": "Connection failed. Please check the host and port.",
+      "connection": "Unable to connect to the brother_ql_web service. Make sure it's running and accessible.",
+      "unknown": "Unknown error occurred."
+    },
+    "abort": {
+      "already_configured": "This printer is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure Integration Options",
+        "description": "Customize how this integration operates.",
+        "data": {
+          "update_interval_seconds": "Update interval (seconds)"
+        },
+        "data_description": {
+          "update_interval_seconds": "How often to refresh data from the printer (10 to 3600 seconds)"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "connection_failed": {
+      "message": "Connection to printer failed during data update."
+    },
+    "update_failed": {
+      "message": "Failed to update data from the printer."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "printer_status": {
+        "name": "Printer Status"
+      }
+    },
+    "binary_sensor": {
+      "printer_connectivity": {
+        "name": "Printer Connectivity"
+      }
+    }
+  }
+}

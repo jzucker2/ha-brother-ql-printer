@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=../../schemas/yaml/services_schema.yaml
+# Describes the format for available services for Brother QL Printer integration
+
+print_text:
+  name: Print Text Label
+  description: Print a text label on the Brother QL printer
+  fields:
+    text:
+      name: Text
+      description: The text to print on the label
+      required: true
+      example: "Hello World"
+      selector:
+        text:
+    font_size:
+      name: Font Size
+      description: "Font size for the text (default: 100)"
+      required: false
+      default: 100
+      example: 100
+      selector:
+        number:
+          min: 10
+          max: 500
+          step: 10
+    font_family:
+      name: Font Family
+      description: "Font family name (default: Arial)"
+      required: false
+      default: Arial
+      example: "Arial"
+      selector:
+        text:
+    label_size:
+      name: Label Size
+      description: Label size (e.g., "62", "29x90")
+      required: false
+      selector:
+        text:
+    orientation:
+      name: Orientation
+      description: Label orientation (standard or rotated)
+      required: false
+      default: standard
+      selector:
+        select:
+          options:
+            - standard
+            - rotated
+
+print_barcode:
+  name: Print Barcode Label
+  description: Print a barcode label on the Brother QL printer
+  fields:
+    data:
+      name: Barcode Data
+      description: The data to encode in the barcode
+      required: true
+      example: "1234567890"
+      selector:
+        text:
+    barcode_type:
+      name: Barcode Type
+      description: Type of barcode to print (CODE128, QR, EAN13, etc.)
+      required: false
+      default: CODE128
+      example: "CODE128"
+      selector:
+        select:
+          options:
+            - CODE128
+            - QR
+            - EAN13
+            - EAN8
+            - CODE39
+            - ITF
+    label_size:
+      name: Label Size
+      description: Label size (e.g., "62", "29x90")
+      required: false
+      selector:
+        text:
+    orientation:
+      name: Orientation
+      description: Label orientation (standard or rotated)
+      required: false
+      default: standard
+      selector:
+        select:
+          options:
+            - standard
+            - rotated
+
+reload_data:
+  name: Reload Data
+  description: Force a refresh of the integration data from the API
+  fields: {}
