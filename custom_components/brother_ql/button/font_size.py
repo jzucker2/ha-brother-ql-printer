@@ -8,8 +8,8 @@ from custom_components.brother_ql.const import DEFAULT_CURRENT_FONT_SIZE, DEFAUL
 from custom_components.brother_ql.entity import BrotherQLEntity
 from custom_components.brother_ql.service_actions.print_label import async_handle_print_text
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
-from homeassistant.const import EntityCategory
-from homeassistant.core import ServiceCall
+from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN, EntityCategory
+from homeassistant.core import Context, ServiceCall
 from homeassistant.helpers import entity_registry as er
 
 if TYPE_CHECKING:
@@ -132,11 +132,16 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
 
         # Get the text value from the entity state
         state = self.hass.states.get(text_entity_id)
-        if not state or not state.state:
-            LOGGER.warning("No text to print - text entity is empty")
+        if not state:
+            LOGGER.warning("Print text entity not found in state registry")
             return
 
-        text_to_print = state.state.strip()
+        state_value = state.state
+        if not state_value or state_value in (STATE_UNAVAILABLE, STATE_UNKNOWN):
+            LOGGER.warning("No text to print - text entity is %s", state_value if state_value else "empty")
+            return
+
+        text_to_print = state_value.strip()
         if not text_to_print:
             LOGGER.warning("No text to print - text entity is empty")
             return
@@ -144,7 +149,8 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
         # Get current font size
         current_font_size = self._entry.options.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE)
 
-        # Create a service call object
+        # Create a service call object with context
+        context = Context()
         service_call = ServiceCall(
             self.hass,
             "brother_ql",
@@ -153,6 +159,7 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
                 "text": text_to_print,
                 "font_size": int(current_font_size),
             },
+            context=context,
         )
 
         try:
