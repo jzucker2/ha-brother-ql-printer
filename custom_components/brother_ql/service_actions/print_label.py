@@ -34,7 +34,9 @@ async def async_handle_print_text(
         raise ValueError(msg)
 
     font_size = call.data.get("font_size", 100)
-    font_family = call.data.get("font_family", "Arial")
+    font_family = call.data.get("font_family", "DejaVu Math TeX Gyre,Regular")
+    alignment = call.data.get("alignment", "center")
+    line_spacing = call.data.get("line_spacing", "100")
     label_size = call.data.get("label_size")
     orientation = call.data.get("orientation", "standard")
 
@@ -51,6 +53,8 @@ async def async_handle_print_text(
             text=text,
             font_size=font_size,
             font_family=font_family,
+            alignment=alignment,
+            line_spacing=line_spacing,
             **kwargs,
         )
         LOGGER.info("Text label printed successfully: %s", text)

@@ -25,10 +25,30 @@ print_text:
           step: 10
     font_family:
       name: Font Family
-      description: "Font family name (default: Arial)"
+      description: "Font family name (default: DejaVu Math TeX Gyre,Regular)"
       required: false
-      default: Arial
-      example: "Arial"
+      default: "DejaVu Math TeX Gyre,Regular"
+      example: "DejaVu Math TeX Gyre,Regular"
+      selector:
+        text:
+    alignment:
+      name: Alignment
+      description: "Text alignment (default: center)"
+      required: false
+      default: center
+      example: center
+      selector:
+        select:
+          options:
+            - left
+            - center
+            - right
+    line_spacing:
+      name: Line Spacing
+      description: "Line spacing for text (default: 100)"
+      required: false
+      default: "100"
+      example: "100"
       selector:
         text:
     label_size:
