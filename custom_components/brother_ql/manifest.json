@@ -2,12 +2,12 @@
   "domain": "brother_ql",
   "name": "Brother QL Printer",
   "codeowners": [
-    "@jpawlowski"
+    "@jzucker2"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/jpawlowski/ha-brother-ql-printer",
+  "documentation": "https://github.com/jzucker2/ha-brother-ql-printer",
   "integration_type": "device",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/jpawlowski/ha-brother-ql-printer/issues",
+  "issue_tracker": "https://github.com/jzucker2/ha-brother-ql-printer/issues",
   "version": "0.3.0"
 }
