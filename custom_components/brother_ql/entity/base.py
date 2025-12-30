@@ -59,7 +59,11 @@ class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{entity_description.key}"
 
         # Get printer info from coordinator data
-        printer_info = coordinator.data.get("printer", {}) if coordinator.data else {}
+        data = coordinator.data
+        if isinstance(data, dict):
+            printer_info = data.get("printer", {})
+        else:
+            printer_info = {}
         model = printer_info.get("model", "Brother QL Printer")
 
         self._attr_device_info = DeviceInfo(
