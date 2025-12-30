@@ -14,6 +14,7 @@ import asyncio
 import json
 import socket
 from typing import Any
+from urllib.parse import urlencode
 
 import aiohttp
 
@@ -178,6 +179,9 @@ class BrotherQLApiClient:
             "image_rotation": kwargs.get("image_rotation", "0"),
         }
 
+        # Encode data as URL-encoded string (matching Node-RED URLSearchParams.toString())
+        encoded_data = urlencode(data, doseq=False)
+
         # Set Content-Type header for form-urlencoded
         headers = {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -188,7 +192,7 @@ class BrotherQLApiClient:
         return await self._api_wrapper(
             method="post",
             url=f"{self._base_url}/labeldesigner/api/print",
-            data=data,
+            data=encoded_data,
             headers=headers,
         )
 
@@ -262,7 +266,7 @@ class BrotherQLApiClient:
         self,
         method: str,
         url: str,
-        data: aiohttp.FormData | dict[str, Any] | None = None,
+        data: aiohttp.FormData | dict[str, Any] | str | None = None,
         params: dict[str, Any] | None = None,
         headers: dict[str, str] | None = None,
     ) -> Any:
@@ -275,7 +279,7 @@ class BrotherQLApiClient:
         Args:
             method: The HTTP method (get, post, patch, etc.).
             url: The URL to request.
-            data: Optional data to send in the request body (FormData or dict).
+            data: Optional data to send in the request body (FormData, dict, or str).
             params: Optional query parameters.
             headers: Optional headers to include in the request.
 
