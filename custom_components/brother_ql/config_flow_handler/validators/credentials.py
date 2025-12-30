@@ -8,10 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from custom_components.brother_ql.api import (
-    BrotherQLApiClient,
-    BrotherQLApiClientError,
-)
+from custom_components.brother_ql.api import BrotherQLApiClient
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 if TYPE_CHECKING:

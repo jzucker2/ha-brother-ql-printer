@@ -12,9 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from custom_components.brother_ql.config_flow_handler.schemas import (
-    get_options_schema,
-)
+from custom_components.brother_ql.config_flow_handler.schemas import get_options_schema
 from homeassistant import config_entries
 
 

@@ -13,10 +13,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from custom_components.brother_ql.api import (
-    BrotherQLApiClientAuthenticationError,
-    BrotherQLApiClientError,
-)
+from custom_components.brother_ql.api import BrotherQLApiClientAuthenticationError, BrotherQLApiClientError
 from custom_components.brother_ql.const import DOMAIN, LOGGER
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed

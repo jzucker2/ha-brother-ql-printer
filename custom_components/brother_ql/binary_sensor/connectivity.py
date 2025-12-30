@@ -13,9 +13,7 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.const import EntityCategory
 
 if TYPE_CHECKING:
-    from custom_components.brother_ql.coordinator import (
-        BrotherQLDataUpdateCoordinator,
-    )
+    from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
 
 ENTITY_DESCRIPTIONS = (
     BinarySensorEntityDescription(
@@ -46,13 +44,13 @@ class BrotherQLConnectivitySensor(BinarySensorEntity, BrotherQLEntity):
         # Connection is considered established if coordinator has valid data
         if not self.coordinator.last_update_success:
             return False
-        
+
         # Check if printer is connected according to API response
         data = self.coordinator.data
         if data and isinstance(data, dict):
             printer = data.get("printer", {})
             return printer.get("connected", False)
-        
+
         return False
 
     @property
@@ -60,7 +58,7 @@ class BrotherQLConnectivitySensor(BinarySensorEntity, BrotherQLEntity):
         """Return additional state attributes."""
         data = self.coordinator.data or {}
         printer = data.get("printer", {})
-        
+
         return {
             "update_interval": str(self.coordinator.update_interval),
             "printer_model": printer.get("model", "Unknown"),

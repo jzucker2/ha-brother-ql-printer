@@ -15,9 +15,7 @@ All validators are re-exported from this __init__.py for convenient imports.
 
 from __future__ import annotations
 
-from custom_components.brother_ql.config_flow_handler.validators.credentials import (
-    validate_connection,
-)
+from custom_components.brother_ql.config_flow_handler.validators.credentials import validate_connection
 
 # Re-export all validators for convenient imports
 __all__ = [

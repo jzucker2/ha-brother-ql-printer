@@ -18,12 +18,8 @@ https://developers.home-assistant.io/docs/config_entries_config_flow_handler
 
 from __future__ import annotations
 
-from custom_components.brother_ql.config_flow_handler.config_flow import (
-    BrotherQLConfigFlowHandler,
-)
-from custom_components.brother_ql.config_flow_handler.options_flow import (
-    BrotherQLOptionsFlow,
-)
+from custom_components.brother_ql.config_flow_handler.config_flow import BrotherQLConfigFlowHandler
+from custom_components.brother_ql.config_flow_handler.options_flow import BrotherQLOptionsFlow
 
 # Re-export for backwards compatibility and external imports
 __all__ = [

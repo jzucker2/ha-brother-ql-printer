@@ -16,17 +16,13 @@ from custom_components.brother_ql.config_flow_handler.schemas import (
     get_reconfigure_schema,
     get_user_schema,
 )
-from custom_components.brother_ql.config_flow_handler.validators import (
-    validate_connection,
-)
+from custom_components.brother_ql.config_flow_handler.validators import validate_connection
 from custom_components.brother_ql.const import DOMAIN, LOGGER
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT
 
 if TYPE_CHECKING:
-    from custom_components.brother_ql.config_flow_handler.options_flow import (
-        BrotherQLOptionsFlow,
-    )
+    from custom_components.brother_ql.config_flow_handler.options_flow import BrotherQLOptionsFlow
 
 # Map exception types to error keys for user-facing messages
 ERROR_MAP = {
@@ -64,9 +60,7 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             The options flow instance for modifying integration options.
 
         """
-        from custom_components.brother_ql.config_flow_handler.options_flow import (  # noqa: PLC0415
-            BrotherQLOptionsFlow,
-        )
+        from custom_components.brother_ql.config_flow_handler.options_flow import BrotherQLOptionsFlow  # noqa: PLC0415
 
         return BrotherQLOptionsFlow()
 

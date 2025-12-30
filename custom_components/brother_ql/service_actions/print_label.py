@@ -125,4 +125,3 @@ async def async_handle_reload_data(
     coordinator = entry.runtime_data.coordinator
     await coordinator.async_request_refresh()
     LOGGER.info("Data reload completed")
-

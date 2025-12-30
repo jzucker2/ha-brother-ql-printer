@@ -7,10 +7,7 @@ from typing import TYPE_CHECKING
 from custom_components.brother_ql.const import PARALLEL_UPDATES
 from homeassistant.components.sensor import SensorEntityDescription
 
-from .status import (
-    ENTITY_DESCRIPTIONS as STATUS_DESCRIPTIONS,
-    BrotherQLStatusSensor,
-)
+from .status import ENTITY_DESCRIPTIONS as STATUS_DESCRIPTIONS, BrotherQLStatusSensor
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.data import BrotherQLConfigEntry
@@ -18,9 +15,7 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 # Combine all entity descriptions from different modules
-ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
-    *STATUS_DESCRIPTIONS,
-)
+ENTITY_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (*STATUS_DESCRIPTIONS,)
 
 
 async def async_setup_entry(

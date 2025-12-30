@@ -5,17 +5,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from custom_components.brother_ql.entity import BrotherQLEntity
-from homeassistant.components.sensor import (
-    SensorEntity,
-    SensorEntityDescription,
-    SensorStateClass,
-)
+from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.const import EntityCategory
 
 if TYPE_CHECKING:
-    from custom_components.brother_ql.coordinator import (
-        BrotherQLDataUpdateCoordinator,
-    )
+    from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
 
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
@@ -44,11 +38,11 @@ class BrotherQLStatusSensor(SensorEntity, BrotherQLEntity):
         """Return the current printer status."""
         if not self.coordinator.data:
             return None
-        
+
         data = self.coordinator.data
         if isinstance(data, dict):
             return data.get("status", "unknown")
-        
+
         return None
 
     @property
@@ -57,10 +51,9 @@ class BrotherQLStatusSensor(SensorEntity, BrotherQLEntity):
         data = self.coordinator.data or {}
         printer = data.get("printer", {})
         last_print = data.get("last_print")
-        
+
         return {
             "printer_model": printer.get("model", "Unknown"),
             "printer_connected": printer.get("connected", False),
             "last_print": last_print,
         }
-
