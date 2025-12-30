@@ -16,7 +16,7 @@ from custom_components.brother_ql.config_flow_handler.schemas import (
     get_reconfigure_schema,
     get_user_schema,
 )
-from custom_components.brother_ql.config_flow_handler.validators import validate_connection
+from custom_components.brother_ql.config_flow_handler.validators import sanitize_host, validate_connection
 from custom_components.brother_ql.const import DOMAIN, LOGGER
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT
@@ -83,10 +83,14 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
+            # Sanitize host input (remove protocol prefixes, trailing slashes)
+            sanitized_host = sanitize_host(user_input[CONF_HOST])
+            user_input[CONF_HOST] = sanitized_host
+
             try:
                 await validate_connection(
                     self.hass,
-                    host=user_input[CONF_HOST],
+                    host=sanitized_host,
                     port=user_input[CONF_PORT],
                 )
             except Exception as exception:  # noqa: BLE001
@@ -94,12 +98,12 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             else:
                 # Set unique ID based on host:port combination
                 port = int(user_input[CONF_PORT])  # Cast to int (NumberSelector may return float)
-                unique_id = f"{user_input[CONF_HOST]}:{port}"
+                unique_id = f"{sanitized_host}:{port}"
                 await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
-                    title=f"Brother QL Printer ({user_input[CONF_HOST]}:{port})",
+                    title=f"Brother QL Printer ({sanitized_host}:{port})",
                     data=user_input,
                 )
 
@@ -130,10 +134,14 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
+            # Sanitize host input (remove protocol prefixes, trailing slashes)
+            sanitized_host = sanitize_host(user_input[CONF_HOST])
+            user_input[CONF_HOST] = sanitized_host
+
             try:
                 await validate_connection(
                     self.hass,
-                    host=user_input[CONF_HOST],
+                    host=sanitized_host,
                     port=user_input[CONF_PORT],
                 )
             except Exception as exception:  # noqa: BLE001
@@ -193,10 +201,14 @@ class BrotherQLConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
+            # Sanitize host input (remove protocol prefixes, trailing slashes)
+            sanitized_host = sanitize_host(user_input[CONF_HOST])
+            user_input[CONF_HOST] = sanitized_host
+
             try:
                 await validate_connection(
                     self.hass,
-                    host=user_input[CONF_HOST],
+                    host=sanitized_host,
                     port=user_input[CONF_PORT],
                 )
             except Exception as exception:  # noqa: BLE001
