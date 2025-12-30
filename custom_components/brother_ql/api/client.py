@@ -140,7 +140,7 @@ class BrotherQLApiClient:
         }
         return await self._api_wrapper(
             method="get",
-            url=f"{self._base_url}/api/print/text",
+            url=f"{self._base_url}/labeldesigner/api/print",
             params=params,
         )
 
