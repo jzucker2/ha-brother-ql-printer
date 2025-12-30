@@ -15,7 +15,7 @@ from homeassistant.helpers.redact import async_redact_data
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
-    from .data import IntegrationBlueprintConfigEntry
+    from .data import BrotherQLConfigEntry
 
 # Fields to redact from diagnostics - CRITICAL for security!
 TO_REDACT = {
@@ -30,7 +30,7 @@ TO_REDACT = {
 
 async def async_get_config_entry_diagnostics(
     hass: HomeAssistant,
-    entry: IntegrationBlueprintConfigEntry,
+    entry: BrotherQLConfigEntry,
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
     coordinator = entry.runtime_data.coordinator
@@ -76,8 +76,9 @@ async def async_get_config_entry_diagnostics(
 
     # API client information (no sensitive data)
     api_info = {
-        "base_endpoint": "https://jsonplaceholder.typicode.com",
-        "has_credentials": bool(client._username),  # noqa: SLF001
+        "base_url": client._base_url,  # noqa: SLF001
+        "host": client._host,  # noqa: SLF001
+        "port": client._port,  # noqa: SLF001
     }
 
     # Integration information
@@ -114,10 +115,12 @@ async def async_get_config_entry_diagnostics(
     if coordinator.data:
         if isinstance(coordinator.data, dict):
             # Include sample data but sanitize sensitive info
+            printer = coordinator.data.get("printer", {})
             data_sample = {
-                "title": coordinator.data.get("title"),
-                "body_length": len(coordinator.data.get("body", "")) if coordinator.data.get("body") else 0,
-                "has_user_id": "userId" in coordinator.data,
+                "status": coordinator.data.get("status"),
+                "printer_model": printer.get("model"),
+                "printer_connected": printer.get("connected"),
+                "has_last_print": "last_print" in coordinator.data,
             }
 
     return {
