@@ -229,6 +229,11 @@ async def async_handle_set_font_size_preset(
             msg = f"Invalid preset value: {preset}"
             raise ValueError(msg) from exc
 
+        # Validate font size is within valid range (10-500)
+        if font_size < 10 or font_size > 500:
+            msg = f"Font size must be between 10 and 500, got {font_size}"
+            raise ValueError(msg)
+
     # Update options with preset font size
     options = dict(entry.options)
     options["current_font_size"] = int(font_size)
