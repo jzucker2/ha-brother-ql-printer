@@ -11,6 +11,7 @@ https://developers.home-assistant.io/docs/api_lib_index
 from __future__ import annotations
 
 import asyncio
+import json
 import socket
 from typing import Any
 
@@ -111,7 +112,9 @@ class BrotherQLApiClient:
         self,
         text: str,
         font_size: int = 100,
-        font_family: str = "Arial",
+        font_family: str = "DejaVu Math TeX Gyre,Regular",
+        alignment: str = "center",
+        line_spacing: str = "100",
         **kwargs: Any,
     ) -> dict[str, Any]:
         """
@@ -120,7 +123,9 @@ class BrotherQLApiClient:
         Args:
             text: The text to print on the label.
             font_size: Font size (default: 100).
-            font_family: Font family name (default: "Arial").
+            font_family: Font family name (default: "DejaVu Math TeX Gyre,Regular").
+            alignment: Text alignment (default: "center").
+            line_spacing: Line spacing (default: "100").
             **kwargs: Additional print parameters (label_size, orientation, etc.).
 
         Returns:
@@ -132,17 +137,59 @@ class BrotherQLApiClient:
             BrotherQLApiClientError: For other API errors.
 
         """
-        data = aiohttp.FormData()
-        data.add_field("text", text)
-        data.add_field("font_size", str(font_size))
-        data.add_field("font_family", font_family)
-        for key, value in kwargs.items():
-            data.add_field(key, str(value))
+        # Format text as JSON array matching brother_ql_web API format
+        text_object = {
+            "font": font_family,
+            "size": str(font_size),
+            "inverted": False,
+            "todo": False,
+            "align": alignment,
+            "line_spacing": line_spacing,
+            "color": "black",
+            "text": text,
+        }
+        formatted_text = json.dumps([text_object])
+
+        # Build form data as dict (will be encoded as application/x-www-form-urlencoded)
+        data: dict[str, Any] = {
+            "text": formatted_text,
+            "label_size": kwargs.get("label_size", "17x54"),
+            "orientation": kwargs.get("orientation", "standard"),
+            "margin_top": kwargs.get("margin_top", "24"),
+            "margin_bottom": kwargs.get("margin_bottom", "24"),
+            "margin_left": kwargs.get("margin_left", "35"),
+            "margin_right": kwargs.get("margin_right", "35"),
+            "print_type": kwargs.get("print_type", "text"),
+            "barcode_type": kwargs.get("barcode_type", "QR"),
+            "qrcode_size": kwargs.get("qrcode_size", "10"),
+            "qrcode_correction": kwargs.get("qrcode_correction", "L"),
+            "image_bw_threshold": kwargs.get("image_bw_threshold", "70"),
+            "image_mode": kwargs.get("image_mode", "grayscale"),
+            "image_fit": kwargs.get("image_fit", "1"),
+            "print_count": kwargs.get("print_count", "1"),
+            "log_level": kwargs.get("log_level", "WARNING"),
+            "cut_once": kwargs.get("cut_once", "0"),
+            "border_thickness": kwargs.get("border_thickness", "0"),
+            "border_roundness": kwargs.get("border_roundness", "0"),
+            "border_distance_x": kwargs.get("border_distance_x", "0"),
+            "border_distance_y": kwargs.get("border_distance_y", "0"),
+            "high_res": kwargs.get("high_res", "0"),
+            "image_scaling_factor": kwargs.get("image_scaling_factor", "100"),
+            "image_rotation": kwargs.get("image_rotation", "0"),
+        }
+
+        # Set Content-Type header for form-urlencoded
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Connection": "keep-alive",
+            "Accept": "*/*",
+        }
 
         return await self._api_wrapper(
             method="post",
             url=f"{self._base_url}/labeldesigner/api/print",
             data=data,
+            headers=headers,
         )
 
     async def async_print_image(
@@ -243,10 +290,21 @@ class BrotherQLApiClient:
         """
         try:
             async with asyncio.timeout(30):
+                # When using FormData, aiohttp automatically sets Content-Type to multipart/form-data
+                # When using dict, aiohttp will encode as application/x-www-form-urlencoded
+                # If headers are provided with Content-Type, use them (for form-urlencoded)
+                request_headers = headers
+                if isinstance(data, aiohttp.FormData) and headers:
+                    # If FormData is used, merge headers but don't override Content-Type
+                    request_headers = {**headers}
+                    if "Content-Type" in request_headers:
+                        # Remove Content-Type from headers - let FormData set it with boundary
+                        del request_headers["Content-Type"]
+
                 response = await self._session.request(
                     method=method,
                     url=url,
-                    headers=headers,
+                    headers=request_headers,
                     data=data,
                     params=params,
                 )
