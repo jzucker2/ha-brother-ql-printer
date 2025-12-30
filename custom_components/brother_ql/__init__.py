@@ -44,6 +44,7 @@ PLATFORMS: list[Platform] = [
     Platform.BUTTON,
     Platform.TEXT,
     Platform.SWITCH,
+    Platform.SELECT,
 ]
 
 # This integration is configured via config entries only

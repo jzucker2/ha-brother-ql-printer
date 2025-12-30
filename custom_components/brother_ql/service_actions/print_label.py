@@ -6,7 +6,13 @@ from typing import TYPE_CHECKING
 
 import aiohttp
 
-from custom_components.brother_ql.const import DEFAULT_CURRENT_FONT_SIZE, DEFAULT_FONT_SIZE, GOOBER_FONT_SIZE, LOGGER
+from custom_components.brother_ql.const import (
+    DEFAULT_CURRENT_FONT_SIZE,
+    DEFAULT_FONT_SIZE,
+    DEFAULT_LABEL_SIZE,
+    GOOBER_FONT_SIZE,
+    LOGGER,
+)
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.data import BrotherQLConfigEntry
@@ -42,7 +48,10 @@ async def async_handle_print_text(
     font_family = call.data.get("font_family", "DejaVu Math TeX Gyre,Regular")
     alignment = call.data.get("alignment", "center")
     line_spacing = call.data.get("line_spacing", "100")
+    # Use provided label_size or fall back to stored label_size from select entity or default
     label_size = call.data.get("label_size")
+    if label_size is None:
+        label_size = entry.options.get("label_size", DEFAULT_LABEL_SIZE)
     orientation = call.data.get("orientation", "standard")
 
     client = entry.runtime_data.client
@@ -102,7 +111,10 @@ async def async_handle_print_barcode(
         raise ValueError(msg)
 
     barcode_type = call.data.get("barcode_type", "CODE128")
+    # Use provided label_size or fall back to stored label_size from select entity or default
     label_size = call.data.get("label_size")
+    if label_size is None:
+        label_size = entry.options.get("label_size", DEFAULT_LABEL_SIZE)
     orientation = call.data.get("orientation", "standard")
 
     client = entry.runtime_data.client
