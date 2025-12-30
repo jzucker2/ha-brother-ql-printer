@@ -57,10 +57,10 @@ class BrotherQLDataUpdateCoordinator(DataUpdateCoordinator):
         """
         # Fetch printer info once at startup
         try:
-            printer_info = await self.config_entry.runtime_data.client.async_get_printer_info()
-            LOGGER.debug("Printer info: %s", printer_info)
+            printer_status = await self.config_entry.runtime_data.client.async_get_status()
+            LOGGER.debug("Printer status: %s", printer_status)
         except Exception as exception:  # noqa: BLE001
-            LOGGER.warning("Could not fetch printer info during setup: %s", exception)
+            LOGGER.warning("Could not fetch printer status during setup: %s", exception)
         LOGGER.debug("Coordinator setup complete for %s", self.config_entry.entry_id)
 
     async def _async_update_data(self) -> Any:

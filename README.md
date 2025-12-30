@@ -19,10 +19,6 @@ This blueprint is designed to work with **Home Assistant 2025.7+** and includes 
 
 ---
 
-After clicking "Create repository", GitHub may offer an optional prompt field for **[Copilot Coding Agent](https://github.com/copilot/agents)**. You can use this to automatically initialize your integration (500 character limit):
-
-**Example:** `--domain my_device --title "My Device" --repo user/hacs-my-device --author "John Doe" --force`
-
 The agent uses `AGENTS.md` and `.github/copilot-instructions.md` for guidance and runs `./script/check` for validation.
 
 **Manual initialization?** Continue with Option 1 or Option 2 below.

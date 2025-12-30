@@ -104,25 +104,7 @@ class BrotherQLApiClient:
         """
         return await self._api_wrapper(
             method="get",
-            url=f"{self._base_url}/api/status",
-        )
-
-    async def async_get_printer_info(self) -> dict[str, Any]:
-        """
-        Get printer information from the API.
-
-        Returns:
-            A dictionary containing printer information (model, capabilities, etc.).
-
-        Raises:
-            BrotherQLApiClientAuthenticationError: If authentication fails.
-            BrotherQLApiClientCommunicationError: If communication fails.
-            BrotherQLApiClientError: For other API errors.
-
-        """
-        return await self._api_wrapper(
-            method="get",
-            url=f"{self._base_url}/api/printer",
+            url=f"{self._base_url}/labeldesigner/api/printer_status",
         )
 
     async def async_print_text(
