@@ -87,7 +87,7 @@ Disabled entities won't update or consume resources.
 
 The integration provides the following services:
 
-### `ha_integration_domain.example_service`
+### `brother_ql.example_service`
 
 Execute an example service action on the device.
 
@@ -102,7 +102,7 @@ Execute an example service action on the device.
 **Example:**
 
 ```yaml
-service: ha_integration_domain.example_service
+service: brother_ql.example_service
 target:
   entity_id: switch.device_name_switch
 data:
@@ -119,7 +119,7 @@ automation:
       - trigger: sun
         event: sunset
     action:
-      - action: ha_integration_domain.example_service
+      - action: brother_ql.example_service
         target:
           entity_id: switch.device_name_switch
         data:
@@ -199,7 +199,7 @@ blueprint:
       selector:
         entity:
           domain: sensor
-          integration: ha_integration_domain
+          integration: brother_ql
     threshold:
       name: Threshold
       selector:

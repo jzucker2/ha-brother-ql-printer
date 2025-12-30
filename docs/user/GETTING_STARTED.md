@@ -26,8 +26,8 @@ This guide will help you install and set up the Integration Blueprint custom int
 ### Manual Installation
 
 1. Download the latest release from the [releases page](https://github.com/jpawlowski/hacs.integration_blueprint/releases)
-2. Extract the `ha_integration_domain` folder from the archive
-3. Copy it to `custom_components/ha_integration_domain/` in your Home Assistant configuration directory
+2. Extract the `brother_ql` folder from the archive
+3. Copy it to `custom_components/brother_ql/` in your Home Assistant configuration directory
 4. Restart Home Assistant
 
 ## Initial Setup
@@ -172,7 +172,7 @@ Enable debug logging to troubleshoot issues:
 logger:
   default: warning
   logs:
-    custom_components.ha_integration_domain: debug
+    custom_components.brother_ql: debug
 ```
 
 Add this to `configuration.yaml`, restart, and reproduce the issue. Check logs for detailed information.
