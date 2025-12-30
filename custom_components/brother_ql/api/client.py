@@ -179,10 +179,12 @@ class BrotherQLApiClient:
             "image_rotation": kwargs.get("image_rotation", "0"),
         }
 
-        # Encode data as URL-encoded string (matching Node-RED URLSearchParams.toString())
-        encoded_data = urlencode(data, doseq=False)
+        # Manually encode as URL-encoded string to match Node-RED URLSearchParams.toString()
+        # Convert all values to strings first, then URL-encode
+        data_str_dict: dict[str, str] = {k: str(v) for k, v in data.items()}
+        encoded_data = urlencode(data_str_dict, doseq=False)
 
-        # Set Content-Type header for form-urlencoded
+        # Set Content-Type header explicitly (matching Node-RED flow)
         headers = {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "Connection": "keep-alive",
@@ -266,7 +268,7 @@ class BrotherQLApiClient:
         self,
         method: str,
         url: str,
-        data: aiohttp.FormData | dict[str, Any] | str | None = None,
+        data: aiohttp.FormData | dict[str, Any] | str | bytes | None = None,
         params: dict[str, Any] | None = None,
         headers: dict[str, str] | None = None,
     ) -> Any:
