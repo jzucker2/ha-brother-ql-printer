@@ -19,25 +19,6 @@ This blueprint is designed to work with **Home Assistant 2025.7+** and includes 
 
 ---
 
-## Getting Started - Creating Your Integration
-
-Ready to create your own Home Assistant integration? **First, create your own repository from this template**, then choose one of two development options:
-
-- **Option 1: GitHub Codespaces** ☁️ - Develop in the cloud (browser-based, zero install, recommended for beginners)
-- **Option 2: Local DevContainer** 💻 - Develop on your machine (requires Docker + VS Code)
-
-Both options use the same DevContainer setup, so your code and workflow are identical!
-
-### Step 0: Create Your Repository First! 🎯
-
-**Before you start developing**, create your own repository:
-
-1. Click the **"Use this template"** button at the top of this page
-2. Choose a name for your integration repository (e.g., `hass-my-awesome-device`)
-3. Click **"Create repository"**
-
-**🤖 Optional: Initialize with Copilot Coding Agent**
-
 After clicking "Create repository", GitHub may offer an optional prompt field for **[Copilot Coding Agent](https://github.com/copilot/agents)**. You can use this to automatically initialize your integration (500 character limit):
 
 ```markdown
