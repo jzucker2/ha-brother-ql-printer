@@ -132,16 +132,17 @@ class BrotherQLApiClient:
             BrotherQLApiClientError: For other API errors.
 
         """
-        params = {
-            "text": text,
-            "font_size": font_size,
-            "font_family": font_family,
-            **kwargs,
-        }
+        data = aiohttp.FormData()
+        data.add_field("text", text)
+        data.add_field("font_size", str(font_size))
+        data.add_field("font_family", font_family)
+        for key, value in kwargs.items():
+            data.add_field(key, str(value))
+
         return await self._api_wrapper(
-            method="get",
+            method="post",
             url=f"{self._base_url}/labeldesigner/api/print",
-            params=params,
+            data=data,
         )
 
     async def async_print_image(
