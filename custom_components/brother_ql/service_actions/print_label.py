@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import aiohttp
 
+from custom_components.brother_ql.api import BrotherQLApiClientCommunicationError
 from custom_components.brother_ql.const import (
     DEFAULT_CURRENT_FONT_SIZE,
     DEFAULT_FONT_SIZE,
@@ -76,8 +77,26 @@ async def async_handle_print_text(
         # Check if we should treat 400 errors as success
         treat_400_as_success = entry.options.get("treat_400_as_success", True)
 
-        # Check if this is a 400 error (ClientResponseError with status 400)
-        if treat_400_as_success and isinstance(exception, aiohttp.ClientResponseError) and exception.status == 400:
+        # Check if this is a 400 error
+        # The exception may be wrapped in BrotherQLApiClientCommunicationError,
+        # so we need to check the exception chain (__cause__)
+        is_400_error = False
+
+        # Check if exception is directly a ClientResponseError with status 400
+        if isinstance(exception, aiohttp.ClientResponseError) and exception.status == 400:
+            is_400_error = True
+        # Check if exception is wrapped and the original cause is a ClientResponseError with status 400
+        elif isinstance(exception, BrotherQLApiClientCommunicationError) and hasattr(exception, "__cause__"):
+            original_exception = exception.__cause__
+            if isinstance(original_exception, aiohttp.ClientResponseError) and original_exception.status == 400:
+                is_400_error = True
+        # Fallback: check any exception's cause for ClientResponseError with status 400
+        elif hasattr(exception, "__cause__") and isinstance(exception.__cause__, aiohttp.ClientResponseError):
+            original_exception = exception.__cause__
+            if original_exception.status == 400:
+                is_400_error = True
+
+        if treat_400_as_success and is_400_error:
             LOGGER.info(
                 "Received HTTP 400 error but treating as success (switch enabled): %s",
                 text,
