@@ -94,3 +94,4 @@ print_barcode:
 reload_data:
   name: Reload Data
   description: Force a refresh of the integration data from the API
+  fields: {}
