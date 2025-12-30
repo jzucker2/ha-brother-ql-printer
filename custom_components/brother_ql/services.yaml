@@ -119,10 +119,6 @@ reload_data:
 set_font_size:
   name: Set Font Size
   description: Set the current font size for printing
-  target:
-    entity:
-      domain: brother_ql
-      device: {}
   fields:
     font_size:
       name: Font Size
@@ -138,19 +134,11 @@ set_font_size:
 reset_font_size:
   name: Reset Font Size
   description: Reset the current font size to the default value
-  target:
-    entity:
-      domain: brother_ql
-      device: {}
   fields: {}
 
 set_font_size_preset:
   name: Set Font Size Preset
   description: Set the current font size to a preset value (goober, default, or custom)
-  target:
-    entity:
-      domain: brother_ql
-      device: {}
   fields:
     preset:
       name: Preset
