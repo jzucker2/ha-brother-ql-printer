@@ -76,6 +76,22 @@
       "font_size": {
         "name": "Font Size"
       }
+    },
+    "button": {
+      "reset_font_size": {
+        "name": "Reset Font Size"
+      },
+      "goober_font_size": {
+        "name": "Set Goober Font Size"
+      },
+      "print_text": {
+        "name": "Print Text"
+      }
+    },
+    "text": {
+      "print_text": {
+        "name": "Print Text"
+      }
     }
   }
 }
