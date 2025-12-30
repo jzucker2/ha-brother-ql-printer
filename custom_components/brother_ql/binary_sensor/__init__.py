@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from custom_components.brother_ql.const import PARALLEL_UPDATES
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 
 from .connectivity import ENTITY_DESCRIPTIONS as CONNECTIVITY_DESCRIPTIONS, BrotherQLConnectivitySensor

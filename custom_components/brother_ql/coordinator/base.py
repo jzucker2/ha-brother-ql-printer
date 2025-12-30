@@ -93,8 +93,7 @@ class BrotherQLDataUpdateCoordinator(DataUpdateCoordinator):
         """
         try:
             # Fetch printer status
-            status = await self.config_entry.runtime_data.client.async_get_status()
-            return status
+            return await self.config_entry.runtime_data.client.async_get_status()
         except BrotherQLApiClientAuthenticationError as exception:
             LOGGER.warning("Connection error - %s", exception)
             raise ConfigEntryAuthFailed(

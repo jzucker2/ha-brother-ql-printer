@@ -14,10 +14,9 @@ from typing import Any
 
 import voluptuous as vol
 
+from custom_components.brother_ql.const import DEFAULT_HOST, DEFAULT_PORT
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.helpers import selector
-
-from ...const import DEFAULT_HOST, DEFAULT_PORT
 
 
 def get_user_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
