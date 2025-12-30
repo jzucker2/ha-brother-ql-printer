@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import aiohttp
+
 from custom_components.brother_ql.const import DEFAULT_CURRENT_FONT_SIZE, DEFAULT_FONT_SIZE, GOOBER_FONT_SIZE, LOGGER
 
 if TYPE_CHECKING:
@@ -62,6 +64,17 @@ async def async_handle_print_text(
         )
         LOGGER.info("Text label printed successfully: %s", text)
     except Exception as exception:
+        # Check if we should treat 400 errors as success
+        treat_400_as_success = entry.options.get("treat_400_as_success", True)
+
+        # Check if this is a 400 error (ClientResponseError with status 400)
+        if treat_400_as_success and isinstance(exception, aiohttp.ClientResponseError) and exception.status == 400:
+            LOGGER.info(
+                "Received HTTP 400 error but treating as success (switch enabled): %s",
+                text,
+            )
+            return
+
         LOGGER.exception("Failed to print text label: %s", exception)
         raise
 

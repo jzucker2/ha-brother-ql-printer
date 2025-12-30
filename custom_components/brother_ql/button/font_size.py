@@ -10,6 +10,7 @@ from custom_components.brother_ql.service_actions.print_label import async_handl
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.const import EntityCategory
 from homeassistant.core import ServiceCall
+from homeassistant.helpers import entity_registry as er
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
@@ -112,7 +113,7 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
         """Handle the button press."""
         # Get print text from the text entity
         # Find the text entity for this config entry using entity registry
-        entity_registry = self.hass.helpers.entity_registry.async_get()
+        entity_registry = er.async_get(self.hass)
         text_entity_id = None
 
         # Find the print_text text entity for this config entry
@@ -145,9 +146,10 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
 
         # Create a service call object
         service_call = ServiceCall(
-            domain="brother_ql",
-            service="print_text",
-            data={
+            self.hass,
+            "brother_ql",
+            "print_text",
+            {
                 "text": text_to_print,
                 "font_size": int(current_font_size),
             },

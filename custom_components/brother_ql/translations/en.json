@@ -92,6 +92,11 @@
       "print_text": {
         "name": "Print Text"
       }
+    },
+    "switch": {
+      "treat_400_as_success": {
+        "name": "Treat 400 as Success"
+      }
     }
   }
 }
