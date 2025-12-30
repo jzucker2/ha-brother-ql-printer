@@ -172,7 +172,7 @@ class BrotherQLApiClient:
 
         return await self._api_wrapper(
             method="post",
-            url=f"{self._base_url}/api/print/image",
+            url=f"{self._base_url}/labeldesigner/api/print/image",
             data=data,
         )
 
@@ -206,7 +206,7 @@ class BrotherQLApiClient:
         }
         return await self._api_wrapper(
             method="get",
-            url=f"{self._base_url}/api/print/barcode",
+            url=f"{self._base_url}/labeldesigner/api/print/barcode",
             params=params,
         )
 
