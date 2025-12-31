@@ -30,7 +30,7 @@ RESET_FONT_SIZE_DESCRIPTION = ButtonEntityDescription(
     translation_key="reset_font_size",
     icon="mdi:restore",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
+    has_entity_name=False,
 )
 
 GOOBER_FONT_SIZE_DESCRIPTION = ButtonEntityDescription(
@@ -38,7 +38,7 @@ GOOBER_FONT_SIZE_DESCRIPTION = ButtonEntityDescription(
     translation_key="goober_font_size",
     icon="mdi:format-size",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
+    has_entity_name=False,
 )
 
 PRINT_TEXT_DESCRIPTION = ButtonEntityDescription(
@@ -46,7 +46,7 @@ PRINT_TEXT_DESCRIPTION = ButtonEntityDescription(
     translation_key="print_text",
     icon="mdi:printer",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
+    has_entity_name=False,
 )
 
 PRINT_DATETIME_DESCRIPTION = ButtonEntityDescription(
@@ -54,7 +54,7 @@ PRINT_DATETIME_DESCRIPTION = ButtonEntityDescription(
     translation_key="print_datetime",
     icon="mdi:calendar-clock",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
+    has_entity_name=False,
 )
 
 
@@ -69,6 +69,9 @@ class BrotherQLResetFontSizeButton(ButtonEntity, BrotherQLEntity):
         """Initialize the button entity."""
         super().__init__(coordinator, RESET_FONT_SIZE_DESCRIPTION)
         self._entry = entry
+        # Override has_entity_name to prevent device name prefix
+        self._attr_has_entity_name = False
+        self._attr_name = "Reset Font Size"
 
     async def async_press(self) -> None:
         """Handle the button press."""
@@ -97,6 +100,9 @@ class BrotherQLGooberFontSizeButton(ButtonEntity, BrotherQLEntity):
         """Initialize the button entity."""
         super().__init__(coordinator, GOOBER_FONT_SIZE_DESCRIPTION)
         self._entry = entry
+        # Override has_entity_name to prevent device name prefix
+        self._attr_has_entity_name = False
+        self._attr_name = "Set Goober Font Size"
 
     async def async_press(self) -> None:
         """Handle the button press."""
@@ -125,6 +131,9 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
         """Initialize the button entity."""
         super().__init__(coordinator, PRINT_TEXT_DESCRIPTION)
         self._entry = entry
+        # Override has_entity_name to prevent device name prefix
+        self._attr_has_entity_name = False
+        self._attr_name = "Print Text"
 
     async def async_press(self) -> None:
         """Handle the button press."""
@@ -199,6 +208,9 @@ class BrotherQLPrintDatetimeButton(ButtonEntity, BrotherQLEntity):
         """Initialize the button entity."""
         super().__init__(coordinator, PRINT_DATETIME_DESCRIPTION)
         self._entry = entry
+        # Override has_entity_name to prevent device name prefix
+        self._attr_has_entity_name = False
+        self._attr_name = "Print Datetime"
 
     async def async_press(self) -> None:
         """Handle the button press."""

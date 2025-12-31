@@ -65,6 +65,9 @@
     "sensor": {
       "printer_status": {
         "name": "Printer Status"
+      },
+      "host_url": {
+        "name": "Host URL"
       }
     },
     "binary_sensor": {
