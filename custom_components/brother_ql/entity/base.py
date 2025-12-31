@@ -38,7 +38,7 @@ class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
     """
 
     _attr_attribution = ATTRIBUTION
-    _attr_has_entity_name = False
+    _attr_has_entity_name = True  # Required for translation_key to work
 
     def __init__(
         self,
@@ -66,6 +66,13 @@ class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
             printer_info = {}
         model = printer_info.get("model", "Brother QL Printer")
 
+        # Get integration version from runtime data
+        sw_version = None
+        if hasattr(coordinator.config_entry, "runtime_data") and coordinator.config_entry.runtime_data:
+            integration = getattr(coordinator.config_entry.runtime_data, "integration", None)
+            if integration:
+                sw_version = integration.version
+
         self._attr_device_info = DeviceInfo(
             identifiers={
                 (
@@ -76,5 +83,6 @@ class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
             name=coordinator.config_entry.title,
             manufacturer="Brother",
             model=model,
+            sw_version=sw_version,
             configuration_url=f"http://{coordinator.config_entry.data.get('host', 'localhost')}:{int(coordinator.config_entry.data.get('port', 8013))}/labeldesigner",
         )
