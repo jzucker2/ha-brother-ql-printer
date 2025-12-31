@@ -8,7 +8,6 @@ from custom_components.brother_ql.const import DEFAULT_CURRENT_FONT_SIZE, LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.const import EntityCategory
-from homeassistant.core import callback
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
@@ -60,12 +59,4 @@ class BrotherQLFontSizeNumber(NumberEntity, BrotherQLEntity):
 
         # Update local value
         self._attr_native_value = float(value)
-        self.async_write_ha_state()
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
-        # Font size is stored in options, not coordinator data
-        # Update local value from options
-        self._attr_native_value = float(self._entry.options.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE))
         self.async_write_ha_state()

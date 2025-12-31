@@ -8,7 +8,6 @@ from custom_components.brother_ql.const import DEFAULT_LABEL_SIZE, LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.const import EntityCategory
-from homeassistant.core import callback
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
@@ -100,11 +99,4 @@ class BrotherQLLabelSizeSelect(SelectEntity, BrotherQLEntity):
 
         # Update local value
         self._attr_current_option = option
-        self.async_write_ha_state()
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
-        # Label size is stored in options, not coordinator data
-        self._attr_current_option = self._entry.options.get("label_size", DEFAULT_LABEL_SIZE)
         self.async_write_ha_state()
