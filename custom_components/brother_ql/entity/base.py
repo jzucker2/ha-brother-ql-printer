@@ -11,7 +11,7 @@ https://developers.home-assistant.io/docs/core/entity/index/#common-properties
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from custom_components.brother_ql.const import ATTRIBUTION
 from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
@@ -67,22 +67,37 @@ class BrotherQLEntity(CoordinatorEntity[BrotherQLDataUpdateCoordinator]):
         model = printer_info.get("model", "Brother QL Printer")
 
         # Get integration version from runtime data
-        sw_version = None
-        if hasattr(coordinator.config_entry, "runtime_data") and coordinator.config_entry.runtime_data:
-            integration = getattr(coordinator.config_entry.runtime_data, "integration", None)
-            if integration:
-                sw_version = integration.version
+        # Only set sw_version if we have a valid version string (not None or empty)
+        sw_version: str | None = None
+        try:
+            if hasattr(coordinator.config_entry, "runtime_data") and coordinator.config_entry.runtime_data:
+                integration = getattr(coordinator.config_entry.runtime_data, "integration", None)
+                if integration and hasattr(integration, "version"):
+                    version_value = integration.version
+                    if version_value and isinstance(version_value, str) and version_value.strip():
+                        sw_version = version_value.strip()
+        except (AttributeError, TypeError):
+            # If we can't get the version (missing attributes or None values), just skip it
+            pass
 
-        self._attr_device_info = DeviceInfo(
-            identifiers={
+        # Build DeviceInfo - only include sw_version if it's a valid non-empty string
+        # Home Assistant's device registry requires sw_version to be a valid version string or omitted
+        device_info_kwargs: dict[str, Any] = {
+            "identifiers": {
                 (
                     coordinator.config_entry.domain,
                     coordinator.config_entry.entry_id,
                 ),
             },
-            name=coordinator.config_entry.title,
-            manufacturer="Brother",
-            model=model,
-            sw_version=sw_version,
-            configuration_url=f"http://{coordinator.config_entry.data.get('host', 'localhost')}:{int(coordinator.config_entry.data.get('port', 8013))}/labeldesigner",
-        )
+            "name": coordinator.config_entry.title,
+            "manufacturer": "Brother",
+            "model": model,
+            "configuration_url": f"http://{coordinator.config_entry.data.get('host', 'localhost')}:{int(coordinator.config_entry.data.get('port', 8013))}/labeldesigner",
+        }
+
+        # Only add sw_version if we have a valid non-empty string value
+        # This prevents AwesomeVersion errors when comparing with existing devices
+        if sw_version:
+            device_info_kwargs["sw_version"] = sw_version
+
+        self._attr_device_info = DeviceInfo(**device_info_kwargs)
