@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import SensorEntityDescription
 
+from .host_url import ENTITY_DESCRIPTION as HOST_URL_DESCRIPTION, BrotherQLHostURLSensor
 from .status import ENTITY_DESCRIPTIONS as STATUS_DESCRIPTIONS, BrotherQLStatusSensor
 
 if TYPE_CHECKING:
@@ -23,11 +24,18 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the sensor platform."""
+    coordinator = entry.runtime_data.coordinator
+
     # Add status sensors
-    async_add_entities(
+    entities = [
         BrotherQLStatusSensor(
-            coordinator=entry.runtime_data.coordinator,
+            coordinator=coordinator,
             entity_description=entity_description,
         )
         for entity_description in STATUS_DESCRIPTIONS
-    )
+    ]
+
+    # Add host URL sensor
+    entities.append(BrotherQLHostURLSensor(coordinator, HOST_URL_DESCRIPTION))
+
+    async_add_entities(entities)

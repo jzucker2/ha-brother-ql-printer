@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from custom_components.brother_ql.button.font_size import (
-    BrotherQLGooberFontSizeButton,
-    BrotherQLPrintDatetimeButton,
-    BrotherQLPrintTextButton,
-    BrotherQLResetFontSizeButton,
-)
+from custom_components.brother_ql.button.goober_font_size import BrotherQLGooberFontSizeButton
+from custom_components.brother_ql.button.print_datetime import BrotherQLPrintDatetimeButton
+from custom_components.brother_ql.button.print_text import BrotherQLPrintTextButton
+from custom_components.brother_ql.button.reset_font_size import BrotherQLResetFontSizeButton
 from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform

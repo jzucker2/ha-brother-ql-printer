@@ -19,7 +19,6 @@ ENTITY_DESCRIPTION = SwitchEntityDescription(
     translation_key="treat_400_as_success",
     icon="mdi:bug-check",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
 )
 
 

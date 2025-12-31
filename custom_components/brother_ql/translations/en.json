@@ -65,6 +65,9 @@
     "sensor": {
       "printer_status": {
         "name": "Printer Status"
+      },
+      "host_url": {
+        "name": "Host URL"
       }
     },
     "binary_sensor": {
@@ -75,6 +78,9 @@
     "number": {
       "font_size": {
         "name": "Font Size"
+      },
+      "default_font_size": {
+        "name": "Default Font Size"
       }
     },
     "button": {

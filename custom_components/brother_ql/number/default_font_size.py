@@ -1,10 +1,10 @@
-"""Font size number entity for Brother QL Printer integration."""
+"""Default font size number entity for Brother QL Printer integration."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from custom_components.brother_ql.const import DEFAULT_CURRENT_FONT_SIZE, LOGGER
+from custom_components.brother_ql.const import DEFAULT_FONT_SIZE, LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.const import EntityCategory
@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
 
 ENTITY_DESCRIPTION = NumberEntityDescription(
-    key="font_size",
-    translation_key="font_size",
+    key="default_font_size",
+    translation_key="default_font_size",
     icon="mdi:format-size",
     entity_category=EntityCategory.CONFIG,
     native_min_value=10,
@@ -25,8 +25,8 @@ ENTITY_DESCRIPTION = NumberEntityDescription(
 )
 
 
-class BrotherQLFontSizeNumber(NumberEntity, BrotherQLEntity):
-    """Font size number entity for Brother QL Printer integration."""
+class BrotherQLDefaultFontSizeNumber(NumberEntity, BrotherQLEntity):
+    """Default font size number entity for Brother QL Printer integration."""
 
     def __init__(
         self,
@@ -36,27 +36,27 @@ class BrotherQLFontSizeNumber(NumberEntity, BrotherQLEntity):
         """Initialize the number entity."""
         super().__init__(coordinator, ENTITY_DESCRIPTION)
         self._entry = entry
-        self._attr_native_value = float(entry.options.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE))
+        self._attr_native_value = float(entry.options.get("default_font_size", DEFAULT_FONT_SIZE))
 
     @property
     def native_value(self) -> float:
-        """Return the current font size."""
-        # Get from options (updated via service calls)
-        return float(self._entry.options.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE))
+        """Return the current default font size."""
+        # Get from options (updated via number entity or options flow)
+        return float(self._entry.options.get("default_font_size", DEFAULT_FONT_SIZE))
 
     async def async_set_native_value(self, value: float) -> None:
         """
-        Set the font size value.
+        Set the default font size value.
 
         Args:
-            value: The font size to set
+            value: The default font size to set
         """
-        # Update options with new font size
+        # Update options with new default font size
         options = dict(self._entry.options)
-        options["current_font_size"] = int(value)
+        options["default_font_size"] = int(value)
 
         self.hass.config_entries.async_update_entry(self._entry, options=options)
-        LOGGER.info("Font size set to %s via number entity", int(value))
+        LOGGER.info("Default font size set to %s via number entity", int(value))
 
         # Update local value
         self._attr_native_value = float(value)
@@ -65,7 +65,7 @@ class BrotherQLFontSizeNumber(NumberEntity, BrotherQLEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        # Font size is stored in options, not coordinator data
+        # Default font size is stored in options, not coordinator data
         # Update local value from options
-        self._attr_native_value = float(self._entry.options.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE))
+        self._attr_native_value = float(self._entry.options.get("default_font_size", DEFAULT_FONT_SIZE))
         self.async_write_ha_state()
