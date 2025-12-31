@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
+from custom_components.brother_ql.select.datetime_format import BrotherQLDatetimeFormatSelect
 from custom_components.brother_ql.select.label_size import BrotherQLLabelSizeSelect
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -27,4 +28,9 @@ async def async_setup_entry(
     """
     coordinator: BrotherQLDataUpdateCoordinator = entry.runtime_data.coordinator
 
-    async_add_entities([BrotherQLLabelSizeSelect(coordinator, entry)])
+    async_add_entities(
+        [
+            BrotherQLLabelSizeSelect(coordinator, entry),
+            BrotherQLDatetimeFormatSelect(coordinator, entry),
+        ]
+    )
