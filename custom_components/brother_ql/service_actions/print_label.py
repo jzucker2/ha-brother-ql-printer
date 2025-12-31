@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 
 import aiohttp
@@ -16,6 +15,7 @@ from custom_components.brother_ql.const import (
     GOOBER_FONT_SIZE,
     LOGGER,
 )
+from homeassistant.util import dt as dt_util
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.data import BrotherQLConfigEntry
@@ -187,7 +187,8 @@ async def async_handle_print_datetime(
         raise ValueError(msg)
 
     # Generate datetime text based on format
-    now = datetime.now()
+    # Use Home Assistant's timezone-aware time instead of system time
+    now = dt_util.now()
     if datetime_format == "Date":
         datetime_text = now.strftime("%m/%d/%Y")  # e.g., 12/04/2025
     elif datetime_format == "Time":
