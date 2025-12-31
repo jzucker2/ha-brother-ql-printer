@@ -12,7 +12,12 @@ from typing import Any
 
 import voluptuous as vol
 
-from custom_components.brother_ql.const import DEFAULT_UPDATE_INTERVAL_SECONDS
+from custom_components.brother_ql.const import (
+    DEFAULT_CURRENT_FONT_SIZE,
+    DEFAULT_FONT_SIZE,
+    DEFAULT_UPDATE_INTERVAL_SECONDS,
+    GOOBER_FONT_SIZE,
+)
 from homeassistant.helpers import selector
 
 
@@ -39,6 +44,39 @@ def get_options_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
                     max=3600,
                     step=10,
                     unit_of_measurement="s",
+                    mode=selector.NumberSelectorMode.BOX,
+                ),
+            ),
+            vol.Optional(
+                "default_font_size",
+                default=defaults.get("default_font_size", DEFAULT_FONT_SIZE),
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=10,
+                    max=500,
+                    step=10,
+                    mode=selector.NumberSelectorMode.BOX,
+                ),
+            ),
+            vol.Optional(
+                "goober_font_size",
+                default=defaults.get("goober_font_size", GOOBER_FONT_SIZE),
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=10,
+                    max=500,
+                    step=10,
+                    mode=selector.NumberSelectorMode.BOX,
+                ),
+            ),
+            vol.Optional(
+                "current_font_size",
+                default=defaults.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE),
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=10,
+                    max=500,
+                    step=10,
                     mode=selector.NumberSelectorMode.BOX,
                 ),
             ),

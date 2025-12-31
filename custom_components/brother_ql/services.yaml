@@ -115,3 +115,39 @@ reload_data:
   name: Reload Data
   description: Force a refresh of the integration data from the API
   fields: {}
+
+set_font_size:
+  name: Set Font Size
+  description: Set the current font size for printing
+  fields:
+    font_size:
+      name: Font Size
+      description: "Font size to set (default: 50)"
+      required: true
+      example: 50
+      selector:
+        number:
+          min: 10
+          max: 500
+          step: 10
+
+reset_font_size:
+  name: Reset Font Size
+  description: Reset the current font size to the default value
+  fields: {}
+
+set_font_size_preset:
+  name: Set Font Size Preset
+  description: Set the current font size to a preset value (goober, default, or custom)
+  fields:
+    preset:
+      name: Preset
+      description: Preset name to use (goober, default, or a number)
+      required: true
+      example: "goober"
+      selector:
+        select:
+          options:
+            - goober
+            - default
+          custom_value: true

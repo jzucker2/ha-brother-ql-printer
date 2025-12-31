@@ -40,6 +40,11 @@ if TYPE_CHECKING:
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
     Platform.SENSOR,
+    Platform.NUMBER,
+    Platform.BUTTON,
+    Platform.TEXT,
+    Platform.SWITCH,
+    Platform.SELECT,
 ]
 
 # This integration is configured via config entries only

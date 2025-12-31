@@ -39,10 +39,16 @@
         "title": "Configure Integration Options",
         "description": "Customize how this integration operates.",
         "data": {
-          "update_interval_seconds": "Update interval (seconds)"
+          "update_interval_seconds": "Update interval (seconds)",
+          "default_font_size": "Default font size",
+          "goober_font_size": "Goober font size",
+          "current_font_size": "Current font size"
         },
         "data_description": {
-          "update_interval_seconds": "How often to refresh data from the printer (10 to 3600 seconds)"
+          "update_interval_seconds": "How often to refresh data from the printer (10 to 3600 seconds)",
+          "default_font_size": "Default font size for printing (10 to 500)",
+          "goober_font_size": "Font size for 'goober' preset (10 to 500)",
+          "current_font_size": "Current active font size (10 to 500)"
         }
       }
     }
@@ -64,6 +70,37 @@
     "binary_sensor": {
       "printer_connectivity": {
         "name": "Printer Connectivity"
+      }
+    },
+    "number": {
+      "font_size": {
+        "name": "Font Size"
+      }
+    },
+    "button": {
+      "reset_font_size": {
+        "name": "Reset Font Size"
+      },
+      "goober_font_size": {
+        "name": "Set Goober Font Size"
+      },
+      "print_text": {
+        "name": "Print Text"
+      }
+    },
+    "text": {
+      "print_text": {
+        "name": "Print Text"
+      }
+    },
+    "switch": {
+      "treat_400_as_success": {
+        "name": "Treat 400 as Success"
+      }
+    },
+    "select": {
+      "label_size": {
+        "name": "Label Size"
       }
     }
   }
