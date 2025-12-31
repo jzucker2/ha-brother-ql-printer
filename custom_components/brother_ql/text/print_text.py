@@ -8,7 +8,6 @@ from custom_components.brother_ql.const import DEFAULT_PRINT_TEXT, LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
 from homeassistant.components.text import TextEntity, TextEntityDescription
 from homeassistant.const import EntityCategory
-from homeassistant.core import callback
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
@@ -60,12 +59,4 @@ class BrotherQLPrintText(TextEntity, BrotherQLEntity):
 
         # Update local value
         self._attr_native_value = value
-        self.async_write_ha_state()
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
-        # Text value is stored in options, not coordinator data
-        # Update local value from options
-        self._attr_native_value = self._entry.options.get("print_text", DEFAULT_PRINT_TEXT)
         self.async_write_ha_state()

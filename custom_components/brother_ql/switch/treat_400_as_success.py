@@ -8,7 +8,6 @@ from custom_components.brother_ql.const import LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.const import EntityCategory
-from homeassistant.core import callback
 
 if TYPE_CHECKING:
     from custom_components.brother_ql.coordinator import BrotherQLDataUpdateCoordinator
@@ -58,10 +57,3 @@ class BrotherQLTreat400AsSuccessSwitch(SwitchEntity, BrotherQLEntity):
         self._attr_is_on = False
         self.async_write_ha_state()
         LOGGER.info("Treat 400 as success disabled")
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
-        # Switch state is stored in options, not coordinator data
-        self._attr_is_on = self._entry.options.get("treat_400_as_success", True)
-        self.async_write_ha_state()
