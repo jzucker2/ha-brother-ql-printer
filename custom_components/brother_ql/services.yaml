@@ -151,3 +151,73 @@ set_font_size_preset:
             - goober
             - default
           custom_value: true
+
+print_datetime:
+  name: Print Datetime Label
+  description: Print a datetime label on the Brother QL printer
+  fields:
+    datetime_format:
+      name: Datetime Format
+      description: "Format for the datetime (Date, Time, or Date and Time)"
+      required: false
+      example: "Date and Time"
+      selector:
+        select:
+          options:
+            - Date
+            - Time
+            - "Date and Time"
+    font_size:
+      name: Font Size
+      description: "Font size for the datetime (default: uses current font size)"
+      required: false
+      example: 100
+      selector:
+        number:
+          min: 10
+          max: 500
+          step: 10
+    font_family:
+      name: Font Family
+      description: "Font family name (default: DejaVu Math TeX Gyre,Regular)"
+      required: false
+      default: "DejaVu Math TeX Gyre,Regular"
+      example: "DejaVu Math TeX Gyre,Regular"
+      selector:
+        text:
+    alignment:
+      name: Alignment
+      description: "Text alignment (default: center)"
+      required: false
+      default: center
+      example: center
+      selector:
+        select:
+          options:
+            - left
+            - center
+            - right
+    line_spacing:
+      name: Line Spacing
+      description: "Line spacing for text (default: 100)"
+      required: false
+      default: "100"
+      example: "100"
+      selector:
+        text:
+    label_size:
+      name: Label Size
+      description: Label size (e.g., "62", "29x90")
+      required: false
+      selector:
+        text:
+    orientation:
+      name: Orientation
+      description: Label orientation (standard or rotated)
+      required: false
+      default: standard
+      selector:
+        select:
+          options:
+            - standard
+            - rotated

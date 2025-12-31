@@ -26,3 +26,6 @@ DEFAULT_LABEL_SIZE = "17x54"
 
 # Print text configuration defaults
 DEFAULT_PRINT_TEXT = ""
+
+# Datetime format configuration defaults
+DEFAULT_DATETIME_FORMAT = "Date and Time"

@@ -86,6 +86,9 @@
       },
       "print_text": {
         "name": "Print Text"
+      },
+      "print_datetime": {
+        "name": "Print Datetime"
       }
     },
     "text": {
@@ -101,6 +104,9 @@
     "select": {
       "label_size": {
         "name": "Label Size"
+      },
+      "datetime_format": {
+        "name": "Datetime Format"
       }
     }
   }

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from custom_components.brother_ql.button.font_size import (
     BrotherQLGooberFontSizeButton,
+    BrotherQLPrintDatetimeButton,
     BrotherQLPrintTextButton,
     BrotherQLResetFontSizeButton,
 )
@@ -36,5 +37,6 @@ async def async_setup_entry(
             BrotherQLResetFontSizeButton(coordinator, entry),
             BrotherQLGooberFontSizeButton(coordinator, entry),
             BrotherQLPrintTextButton(coordinator, entry),
+            BrotherQLPrintDatetimeButton(coordinator, entry),
         ]
     )
