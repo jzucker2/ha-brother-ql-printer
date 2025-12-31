@@ -57,7 +57,7 @@ ENTITY_DESCRIPTION = SelectEntityDescription(
     translation_key="label_size",
     icon="mdi:label",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
+    has_entity_name=False,
     options=LABEL_SIZE_OPTIONS,
 )
 

@@ -17,7 +17,7 @@ ENTITY_DESCRIPTION = SensorEntityDescription(
     translation_key="host_url",
     icon="mdi:link",
     entity_category=EntityCategory.DIAGNOSTIC,
-    has_entity_name=True,
+    has_entity_name=False,
 )
 
 

@@ -19,7 +19,7 @@ ENTITY_DESCRIPTION = TextEntityDescription(
     translation_key="print_text",
     icon="mdi:text",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=True,
+    has_entity_name=False,
     native_min=0,
     native_max=1000,
 )
