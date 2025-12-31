@@ -6,8 +6,10 @@ from typing import TYPE_CHECKING
 
 from custom_components.brother_ql.const import DEFAULT_CURRENT_FONT_SIZE, DEFAULT_FONT_SIZE, GOOBER_FONT_SIZE, LOGGER
 from custom_components.brother_ql.entity import BrotherQLEntity
+from custom_components.brother_ql.service_actions.print_label import async_handle_print_text
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN, EntityCategory
+from homeassistant.core import Context, ServiceCall
 from homeassistant.helpers import entity_registry as er
 
 if TYPE_CHECKING:
@@ -147,17 +149,22 @@ class BrotherQLPrintTextButton(ButtonEntity, BrotherQLEntity):
         # Get current font size
         current_font_size = self._entry.options.get("current_font_size", DEFAULT_CURRENT_FONT_SIZE)
 
-        # Call the service using hass.services.async_call (proper way to call services programmatically)
+        # Call the handler directly with this entry's context
+        # This ensures we print to the correct printer (the one associated with this button)
+        context = Context()
+        service_call = ServiceCall(
+            self.hass,
+            "brother_ql",
+            "print_text",
+            {
+                "text": text_to_print,
+                "font_size": int(current_font_size),
+            },
+            context=context,
+        )
+
         try:
-            await self.hass.services.async_call(
-                "brother_ql",
-                "print_text",
-                {
-                    "text": text_to_print,
-                    "font_size": int(current_font_size),
-                },
-                blocking=True,
-            )
+            await async_handle_print_text(self.hass, self._entry, service_call)
             LOGGER.info("Text printed successfully: %s (font size: %s)", text_to_print, current_font_size)
         except Exception as exception:
             LOGGER.exception("Failed to print text: %s", exception)
