@@ -26,7 +26,6 @@ ENTITY_DESCRIPTION = SelectEntityDescription(
     translation_key="datetime_format",
     icon="mdi:calendar-clock",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=False,
     options=DATETIME_FORMAT_OPTIONS,
 )
 

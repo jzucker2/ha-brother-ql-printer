@@ -17,7 +17,6 @@ ENTITY_DESCRIPTIONS = (
         translation_key="printer_status",
         icon="mdi:printer",
         entity_category=EntityCategory.DIAGNOSTIC,
-        has_entity_name=False,
     ),
 )
 

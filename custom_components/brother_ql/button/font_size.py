@@ -30,7 +30,6 @@ RESET_FONT_SIZE_DESCRIPTION = ButtonEntityDescription(
     translation_key="reset_font_size",
     icon="mdi:restore",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=False,
 )
 
 GOOBER_FONT_SIZE_DESCRIPTION = ButtonEntityDescription(
@@ -38,7 +37,6 @@ GOOBER_FONT_SIZE_DESCRIPTION = ButtonEntityDescription(
     translation_key="goober_font_size",
     icon="mdi:format-size",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=False,
 )
 
 PRINT_TEXT_DESCRIPTION = ButtonEntityDescription(
@@ -46,7 +44,6 @@ PRINT_TEXT_DESCRIPTION = ButtonEntityDescription(
     translation_key="print_text",
     icon="mdi:printer",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=False,
 )
 
 PRINT_DATETIME_DESCRIPTION = ButtonEntityDescription(
@@ -54,7 +51,6 @@ PRINT_DATETIME_DESCRIPTION = ButtonEntityDescription(
     translation_key="print_datetime",
     icon="mdi:calendar-clock",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=False,
 )
 
 

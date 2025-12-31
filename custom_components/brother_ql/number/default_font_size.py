@@ -19,7 +19,6 @@ ENTITY_DESCRIPTION = NumberEntityDescription(
     translation_key="default_font_size",
     icon="mdi:format-size",
     entity_category=EntityCategory.CONFIG,
-    has_entity_name=False,
     native_min_value=10,
     native_max_value=500,
     native_step=10,
